@@ -1,0 +1,4 @@
+*.psd
+*.zip
+node_modules/
+dist/

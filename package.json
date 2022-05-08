@@ -1,0 +1,29 @@
+{
+  "name": "phaser-boilerplate",
+  "version": "0.1.0",
+  "description": "",
+  "main": "game.ts",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "prod": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jz-feng/phaser-boilerplate.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jz-feng/phaser-boilerplate/issues"
+  },
+  "homepage": "https://github.com/jz-feng/phaser-boilerplate#readme",
+  "devDependencies": {
+    "live-server": "^1.1.0",
+    "phaser": "^3.54.0",
+    "ts-loader": "^9.1.2",
+    "typescript": "^4.2.4",
+    "webfontloader": "^1.6.28",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
+  }
+}
