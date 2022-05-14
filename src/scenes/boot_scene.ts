@@ -22,6 +22,9 @@ export class BootScene extends Phaser.Scene {
     //   frameHeight: 64,
     // });
 
+    // Tilemap
+    this.load.tilemapTiledJSON("tilemap", "assets/maps/tilemap.json");
+
     // sound
     // this.load.audio("baz", "assets/sfx/baz.wav");
   }

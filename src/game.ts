@@ -18,6 +18,9 @@ const config: GameConfig = {
     keyboard: true,
   },
   backgroundColor: "#ffffff",
+  physics: {
+    default: "arcade",
+  },
 };
 
 export class BoilerplateGame extends Phaser.Game {

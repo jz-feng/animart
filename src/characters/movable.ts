@@ -1,14 +1,14 @@
-import { Math } from "phaser";
+import { GameObjects, Math } from "phaser";
 import { Consts } from "../consts";
 
-export abstract class Movable extends Phaser.GameObjects.GameObject {
-  public sprite: Phaser.GameObjects.Rectangle;
+export abstract class Movable extends GameObjects.GameObject {
+  protected sprite: GameObjects.Rectangle;
 
   private velocity = new Math.Vector2();
 
   constructor(
     scene: Phaser.Scene,
-    sprite: Phaser.GameObjects.Rectangle,
+    sprite: GameObjects.Rectangle,
     type: string
   ) {
     super(scene, type);
@@ -19,6 +19,10 @@ export abstract class Movable extends Phaser.GameObjects.GameObject {
 
   public update(): void {
     this.move();
+  }
+
+  public getSprite(): GameObjects.Rectangle {
+    return this.sprite;
   }
 
   protected move(): void {

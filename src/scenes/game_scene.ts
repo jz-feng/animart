@@ -20,14 +20,28 @@ export class GameScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
-    this.add
-      .rectangle(0, 0, Consts.GAME_WIDTH, Consts.GAME_HEIGHT, 0xf8aa74)
-      .setOrigin(0, 0);
+    // this.add
+    //   .rectangle(0, 0, Consts.GAME_WIDTH, Consts.GAME_HEIGHT, 0xf8aa74)
+    //   .setOrigin(0, 0);
+
+    let tilemap = this.add.tilemap(
+      "tilemap",
+      Consts.TILE_SIZE,
+      Consts.TILE_SIZE,
+      Consts.MAP_WIDTH,
+      Consts.MAP_HEIGHT
+    );
+    let collision_layer = tilemap.createLayer("Collision", "tiles");
+    console.log(tilemap.layers);
+    collision_layer.setCollisionBetween(0, 256, true);
 
     this.player = new Player(this);
 
     this.camera = this.cameras.main;
-    this.camera.startFollow(this.player.sprite);
+    this.camera.startFollow(this.player.getSprite());
+
+    this.physics.add.existing(this.player.getSprite());
+    this.physics.add.collider(this.player.getSprite(), collision_layer);
 
     this.npcs.push(
       new NPC(
