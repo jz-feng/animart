@@ -2,6 +2,7 @@ import { Consts } from "../consts";
 import { MoveAI } from "../characters/move_ai";
 import { NPC } from "../characters/npc";
 import { Player } from "../characters/player";
+import { Assets } from "../assets";
 
 export class GameScene extends Phaser.Scene {
   private camera: Phaser.Cameras.Scene2D.Camera;
@@ -20,27 +21,37 @@ export class GameScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
-    // this.add
-    //   .rectangle(0, 0, Consts.GAME_WIDTH, Consts.GAME_HEIGHT, 0xf8aa74)
-    //   .setOrigin(0, 0);
-
     let tilemap = this.add.tilemap(
-      "tilemap",
+      Assets.Tilemap.TILEMAP_JSON,
       Consts.TILE_SIZE,
       Consts.TILE_SIZE,
       Consts.MAP_WIDTH,
       Consts.MAP_HEIGHT
     );
-    let collision_layer = tilemap.createLayer("Collision", "tiles");
-    console.log(tilemap.layers);
-    collision_layer.setCollisionBetween(0, 256, true);
+    tilemap.addTilesetImage(
+      Assets.Tilemap.TILESET_NAME,
+      Assets.Tilemap.TILESET_IMG
+    );
+
+    let floor_layer = tilemap.createLayer("Floor", Assets.Tilemap.TILESET_NAME);
+    let collision_layer = tilemap.createLayer(
+      "Collision",
+      Assets.Tilemap.TILESET_NAME
+    );
+    let in_front_layer = tilemap.createLayer(
+      "InFront",
+      Assets.Tilemap.TILESET_NAME
+    );
+    in_front_layer.depth = 1;
+
+    // Set collision for all tiles on collision layer. NOTE: only include non-empty tiles
+    collision_layer.setCollisionBetween(0, 5, true);
 
     this.player = new Player(this);
 
     this.camera = this.cameras.main;
     this.camera.startFollow(this.player.getSprite());
 
-    this.physics.add.existing(this.player.getSprite());
     this.physics.add.collider(this.player.getSprite(), collision_layer);
 
     this.npcs.push(
@@ -53,7 +64,7 @@ export class GameScene extends Phaser.Scene {
           Consts.TILE_SIZE,
           0x000000
         ),
-        new MoveAI(this, 2)
+        new MoveAI(this, 128)
       )
     );
 
@@ -67,8 +78,12 @@ export class GameScene extends Phaser.Scene {
           Consts.TILE_SIZE,
           0x000000
         ),
-        new MoveAI(this, 2)
+        new MoveAI(this, 128)
       )
+    );
+
+    this.npcs.forEach((npc) =>
+      this.physics.add.collider(npc.getSprite(), collision_layer)
     );
   }
 

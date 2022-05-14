@@ -4,6 +4,8 @@ import { Movable } from "./movable";
 export class Player extends Movable {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
+  private static moveSpeed = 256;
+
   constructor(scene: Phaser.Scene) {
     super(
       scene,
@@ -36,6 +38,6 @@ export class Player extends Movable {
     } else if (this.cursors.right.isDown) {
       direction.x = 1;
     }
-    return direction.scale(4);
+    return direction.scale(Player.moveSpeed);
   }
 }
