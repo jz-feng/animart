@@ -10,7 +10,11 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
-    console.log("test");
+    this.add.text(0, 0, "title", {
+      color: "#000000",
+    });
+
+    this.input.keyboard.on("keydown-SPACE", () => this.startGame());
   }
 
   // Trigger main game scene
