@@ -22,14 +22,12 @@ export abstract class Movable extends Phaser.GameObjects.GameObject {
   }
 
   protected move(): void {
-    console.log(this.sprite.x + ", " + this.sprite.y);
     if (
       this.sprite.x % Consts.TILE_SIZE === 0 &&
       this.sprite.y % Consts.TILE_SIZE === 0
     ) {
       this.velocity = this.getMovement();
     }
-    console.log(this.velocity);
     this.sprite.x += this.velocity.x;
     this.sprite.y += this.velocity.y;
   }
