@@ -1,7 +1,7 @@
 import { Consts } from "../consts";
-import { Character } from "./character";
+import { Movable } from "./movable";
 
-export class Player extends Character {
+export class Player extends Movable {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
   constructor(scene: Phaser.Scene) {
@@ -36,6 +36,6 @@ export class Player extends Character {
     } else if (this.cursors.right.isDown) {
       direction.x = 1;
     }
-    return direction.normalize().scale(5);
+    return direction.scale(4);
   }
 }

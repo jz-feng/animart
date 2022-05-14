@@ -7,7 +7,7 @@ export namespace Consts {
     export const BACKGROUND = "#eef2c3";
   }
 
-  export const GAME_WIDTH = 1080;
-  export const GAME_HEIGHT = 720;
   export const TILE_SIZE = 64;
+  export const GAME_WIDTH = TILE_SIZE * 16;
+  export const GAME_HEIGHT = TILE_SIZE * 12;
 }

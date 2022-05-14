@@ -39,7 +39,7 @@ export class GameScene extends Phaser.Scene {
           Consts.TILE_SIZE,
           0x000000
         ),
-        new MoveAI(this, 3)
+        new MoveAI(this, 2)
       )
     );
 
@@ -47,13 +47,13 @@ export class GameScene extends Phaser.Scene {
       new NPC(
         this,
         this.add.rectangle(
-          900,
+          512,
           256,
           Consts.TILE_SIZE,
           Consts.TILE_SIZE,
           0x000000
         ),
-        new MoveAI(this, 3)
+        new MoveAI(this, 2)
       )
     );
   }

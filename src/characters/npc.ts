@@ -1,7 +1,7 @@
-import { Character } from "./character";
+import { Movable } from "./movable";
 import { MoveAI } from "./move_ai";
 
-export class NPC extends Character {
+export class NPC extends Movable {
   private moveAI: MoveAI;
 
   constructor(
