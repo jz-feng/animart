@@ -1,7 +1,7 @@
 import { Consts } from "../consts";
-import { MoveAI } from "../objects/move_ai";
-import { NPC } from "../objects/npc";
-import { Player } from "../objects/player";
+import { MoveAI } from "../characters/move_ai";
+import { NPC } from "../characters/npc";
+import { Player } from "../characters/player";
 
 export class GameScene extends Phaser.Scene {
   private camera: Phaser.Cameras.Scene2D.Camera;
