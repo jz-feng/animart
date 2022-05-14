@@ -12,9 +12,8 @@ export class Player extends Character {
         Consts.GAME_HEIGHT / 2,
         Consts.TILE_SIZE,
         Consts.TILE_SIZE,
-        0x000000
+        0xffffff
       ),
-      10,
       "player"
     );
 
@@ -37,7 +36,6 @@ export class Player extends Character {
     } else if (this.cursors.right.isDown) {
       direction.x = 1;
     }
-    direction.normalize();
-    return direction;
+    return direction.normalize().scale(5);
   }
 }

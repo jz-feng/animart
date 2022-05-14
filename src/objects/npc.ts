@@ -1,8 +1,17 @@
 import { Character } from "./character";
+import { MoveAI } from "./move_ai";
 
 export class NPC extends Character {
-  constructor(scene: Phaser.Scene, sprite: Phaser.GameObjects.Rectangle) {
-    super(scene, sprite, 5, "NPC");
+  private moveAI: MoveAI;
+
+  constructor(
+    scene: Phaser.Scene,
+    sprite: Phaser.GameObjects.Rectangle,
+    moveAI: MoveAI
+  ) {
+    super(scene, sprite, "NPC");
+
+    this.moveAI = moveAI;
   }
 
   public update(): void {
@@ -10,8 +19,6 @@ export class NPC extends Character {
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
-    let direction = new Phaser.Math.Vector2();
-
-    return direction;
+    return this.moveAI.getMovement();
   }
 }

@@ -1,10 +1,13 @@
 import { Consts } from "../consts";
+import { MoveAI } from "../objects/move_ai";
 import { NPC } from "../objects/npc";
 import { Player } from "../objects/player";
 
 export class GameScene extends Phaser.Scene {
-  private player: Player;
   private camera: Phaser.Cameras.Scene2D.Camera;
+
+  private player: Player;
+  private npcs: NPC[] = [];
 
   constructor() {
     super({
@@ -26,13 +29,37 @@ export class GameScene extends Phaser.Scene {
     this.camera = this.cameras.main;
     this.camera.startFollow(this.player.sprite);
 
-    let npc = new NPC(
-      this,
-      this.add.rectangle(256, 256, Consts.TILE_SIZE, Consts.TILE_SIZE, 0x000000)
+    this.npcs.push(
+      new NPC(
+        this,
+        this.add.rectangle(
+          256,
+          256,
+          Consts.TILE_SIZE,
+          Consts.TILE_SIZE,
+          0x000000
+        ),
+        new MoveAI(this, 3)
+      )
+    );
+
+    this.npcs.push(
+      new NPC(
+        this,
+        this.add.rectangle(
+          900,
+          256,
+          Consts.TILE_SIZE,
+          Consts.TILE_SIZE,
+          0x000000
+        ),
+        new MoveAI(this, 3)
+      )
     );
   }
 
   update(): void {
     this.player.update();
+    this.npcs.forEach((npc) => npc.update());
   }
 }
