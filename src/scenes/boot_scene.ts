@@ -36,10 +36,14 @@ export class BootScene extends Phaser.Scene {
     );
 
     // sound
-    // this.load.audio("baz", "assets/sfx/baz.wav");
+    this.load.audio("bgm", "assets/sfx/bgm.wav");
+    this.load.audio("gameStartMeow", "assets/sfx/meow.wav");
+    this.load.audio("spotted", "assets/sfx/spotted.wav");
   }
 
   create(): void {
+    this.game.sound.add("bgm", {loop: true});
+
     // Trigger title scene
     this.scene.start("TitleScene");
   }

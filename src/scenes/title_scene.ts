@@ -1,6 +1,8 @@
 import { Consts } from "../consts";
 
 export class TitleScene extends Phaser.Scene {
+  private gameStartMeow: Phaser.Sound.BaseSound;
+
   constructor() {
     super({
       key: "TitleScene",
@@ -37,10 +39,13 @@ export class TitleScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5);
 
     this.input.keyboard.on("keydown-SPACE", () => this.startGame());
+
+    this.gameStartMeow = this.sound.add("gameStartMeow");
   }
 
   // Trigger main game scene
   startGame() {
+    this.gameStartMeow.play();
     this.scene.start("GameScene");
   }
 }

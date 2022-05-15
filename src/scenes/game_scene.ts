@@ -3,7 +3,7 @@ import { MoveAI } from "../characters/move_ai";
 import { NPC } from "../characters/npc";
 import { Player } from "../characters/player";
 import { Assets } from "../assets";
-import { GameObjects, Math, Tilemaps } from "phaser";
+import { GameObjects, Math, Sound, Tilemaps } from "phaser";
 import { Interactable, InteractableType } from "../objects/interactable";
 import { Utils } from "../utils";
 
@@ -75,6 +75,12 @@ export class GameScene extends Phaser.Scene {
     this.setUpUI();
     this.setUpInteractables();
     this.setUpAnimations();
+
+    // sound
+    let bgm = this.game.sound.get("bgm");
+    if (!bgm.isPlaying) {
+      bgm.play();
+    }
   }
 
   update(): void {

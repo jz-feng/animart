@@ -1,4 +1,4 @@
-import { GameObjects, Math } from "phaser";
+import { GameObjects, Math, Sound } from "phaser";
 import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
@@ -9,6 +9,9 @@ export class NPC extends Movable {
   private moveAI: MoveAI;
   private hasInteracted: boolean = false;
   private alert: GameObjects.Text;
+
+  // sound
+  private spottedSound: Sound.BaseSound;
 
   constructor(
     scene: GameScene,
@@ -43,6 +46,9 @@ export class NPC extends Movable {
     //   yoyo: true,
     //   repeat: -1,
     // });
+
+    // sound
+    this.spottedSound = scene.sound.add("spotted");
   }
 
   public update(): void {
@@ -80,6 +86,7 @@ export class NPC extends Movable {
   public triggerConvo(): void {
     this.moveState = MoveState.Seeking;
     this.hasInteracted = true;
+    this.spottedSound.play();
     this.alert.setVisible(true);
   }
 
