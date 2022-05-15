@@ -154,10 +154,10 @@ export class GameScene extends Phaser.Scene {
         this.npcs.forEach((npc) => {
           if (!npc.canMove()) npc.continueConvo();
         });
+      } else {
+        this.checkInteract();
       }
     });
-
-    this.input.keyboard.on("keydown-E", () => this.checkInteract());
   }
 
   public triggerEndConvo(): void {
