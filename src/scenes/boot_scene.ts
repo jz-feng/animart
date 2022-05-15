@@ -41,10 +41,20 @@ export class BootScene extends Phaser.Scene {
     this.load.audio("gameOverMeow", "assets/sfx/meow_angry.wav");
     this.load.audio("gameStartMeow", "assets/sfx/meow.wav");
     this.load.audio("spotted", "assets/sfx/spotted.wav");
+    this.load.audio("female_1", "assets/sfx/voices/VoiceFemaleHigh1.wav");
+    this.load.audio("female_2", "assets/sfx/voices/VoiceFemaleHigh2.wav");
+    this.load.audio("female_3", "assets/sfx/voices/VoiceFemaleHigh3.wav");
+    this.load.audio("female_4", "assets/sfx/voices/VoiceFemaleHigh4.wav");
+    this.load.audio("female_5", "assets/sfx/voices/VoiceFemaleHigh5.wav");
+    this.load.audio("male_1", "assets/sfx/voices/VoiceMaleHigh1.wav");
+    this.load.audio("male_2", "assets/sfx/voices/VoiceMaleHigh2.wav");
+    this.load.audio("male_3", "assets/sfx/voices/VoiceMaleHigh3.wav");
+    this.load.audio("male_4", "assets/sfx/voices/VoiceMaleHigh4.wav");
+    this.load.audio("male_5", "assets/sfx/voices/VoiceMaleHigh5.wav");
   }
 
   create(): void {
-    this.game.sound.add("bgm", {loop: true});
+    this.game.sound.add("bgm", { loop: true });
 
     // Trigger title scene
     this.scene.start("TitleScene");

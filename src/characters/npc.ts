@@ -19,12 +19,16 @@ export class NPC extends Movable {
 
   // sound
   private spottedSound: Sound.BaseSound;
+  private speechSounds: Sound.BaseSound[] = [];
+
+  private rnd: Math.RandomDataGenerator;
 
   constructor(
     scene: GameScene,
     location: Math.Vector2,
     moveAI: MoveAI,
     dialogText: string[],
+    voice: string,
     canSee: boolean
   ) {
     super(
@@ -32,6 +36,8 @@ export class NPC extends Movable {
       scene.add.sprite(location.x, location.y, Assets.NPC, 0),
       "NPC"
     );
+
+    this.rnd = new Math.RandomDataGenerator();
 
     this.moveAI = moveAI;
 
@@ -61,6 +67,9 @@ export class NPC extends Movable {
 
     // sound
     this.spottedSound = scene.sound.add("spotted");
+    for (let i = 1; i < 6; i++) {
+      this.speechSounds.push(scene.sound.add(voice + "_" + i));
+    }
 
     this.dialogBox = scene.add
       .rectangle(0, 0, Consts.TILE_SIZE * 7, Consts.TILE_SIZE * 3, 0xffffff)
@@ -125,12 +134,16 @@ export class NPC extends Movable {
     this.hasInteracted = true;
     this.spottedSound.play();
     this.alert.setVisible(true);
+
+    this.speechSounds.at(0).play();
   }
 
   public continueConvo(): void {
     if (this.currSetenceIndex < this.dialogSentences.length) {
       this.currSetenceIndex++;
       this.updateDialogText();
+
+      this.rnd.pick(this.speechSounds.slice(1)).play();
     } else {
       this.endConvo();
     }

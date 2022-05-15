@@ -96,6 +96,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(3, 3),
         new MoveAI(this, 128),
         Assets.Text.T5,
+        "female",
         true
       )
     );
@@ -105,6 +106,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(8, 6),
         new MoveAI(this, 128),
         Assets.Text.T4,
+        "male",
         true
       )
     );
@@ -114,6 +116,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(15, 6),
         new MoveAI(this, 128),
         Assets.Text.T3,
+        "female",
         true
       )
     );
@@ -123,6 +126,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(2, 11),
         new MoveAI(this, 128),
         Assets.Text.T2,
+        "male",
         true
       )
     );
@@ -133,6 +137,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(13, 12),
         new MoveAI(this, 128),
         Assets.Text.T1,
+        "female",
         true
       )
     );
