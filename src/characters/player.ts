@@ -1,6 +1,5 @@
 import { Math } from "phaser";
 import { Assets } from "../assets";
-import { Consts } from "../consts";
 import { Movable } from "./movable";
 
 export class Player extends Movable {
@@ -35,6 +34,10 @@ export class Player extends Movable {
     super.endConvo();
 
     this.energy -= 10;
+
+    if (this.energy <= 0) {
+      this.emit("game_over");
+    }
   }
 
   protected getMovement(): Math.Vector2 {

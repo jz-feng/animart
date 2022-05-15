@@ -6,15 +6,19 @@ import { Assets } from "../assets";
 import { GameObjects, Math, Sound, Tilemaps } from "phaser";
 import { Interactable, InteractableType } from "../objects/interactable";
 import { Utils } from "../utils";
+import { GroceryList } from "../objects/grocery_list";
 
 export class GameScene extends Phaser.Scene {
   private camera: Phaser.Cameras.Scene2D.Camera;
 
+  // Objects
   private player: Player;
   private npcs: NPC[] = [];
   private interactables: Interactable[] = [];
 
+  // UI
   private energyBar: GameObjects.Rectangle;
+  private groceryList: Map<InteractableType, GameObjects.Text> = new Map();
 
   public collisionLayer: Tilemaps.TilemapLayer;
 
@@ -59,24 +63,13 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player.getSprite(), this.collisionLayer);
 
-    this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(3, 3), new MoveAI(this, 128), true)
-    );
-
-    this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(5, 3), new MoveAI(this, 128), true)
-    );
-
-    this.npcs.forEach((npc) =>
-      this.physics.add.collider(npc.getSprite(), this.collisionLayer)
-    );
-
+    this.setUpNPCs();
     this.setUpInputs();
     this.setUpUI();
     this.setUpInteractables();
     this.setUpAnimations();
-
-    // sound
+    this.setUpEvents();
+ 
     let bgm = this.game.sound.get("bgm");
     if (!bgm.isPlaying) {
       bgm.play();
@@ -94,6 +87,20 @@ export class GameScene extends Phaser.Scene {
     return this.player;
   }
 
+  private setUpNPCs(): void {
+    this.npcs.push(
+      new NPC(this, Utils.tilesToPixels(3, 3), new MoveAI(this, 128), true)
+    );
+
+    this.npcs.push(
+      new NPC(this, Utils.tilesToPixels(5, 3), new MoveAI(this, 128), true)
+    );
+
+    this.npcs.forEach((npc) =>
+      this.physics.add.collider(npc.getSprite(), this.collisionLayer)
+    );
+  }
+
   private setUpInputs(): void {
     this.input.keyboard.on("keydown-SPACE", () => {
       if (!this.player.canMove()) {
@@ -108,15 +115,61 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setUpUI(): void {
-    let ui_layer = this.add.group();
+    // For some reason scroll factor doesn't work on layers
+    let ui_layer = this.add.layer();
 
     this.energyBar = this.add
-      .rectangle(Consts.TILE_SIZE * 8, 32, Consts.TILE_SIZE * 3.5, 32, 0xffffff)
-      .setOrigin(0, 0);
-    this.energyBar.setScrollFactor(0);
+      .rectangle(Consts.TILE_SIZE * 8, 32, Consts.TILE_SIZE * 3.5, 32, 0xeebbcc)
+      .setOrigin(0, 0)
+      .setScrollFactor(0);
     ui_layer.add(this.energyBar);
     ui_layer.setDepth(10);
-    // ui_layer.getChildren().forEach(c => c.set)
+
+    const sheet = this.add
+      .rectangle(
+        16,
+        Consts.TILE_SIZE * 4,
+        Consts.TILE_SIZE * 3,
+        Consts.TILE_SIZE * 4 - 16,
+        0xffffff
+      )
+      .setOrigin(0, 0)
+      .setStrokeStyle(2, 0x888888)
+      .setScrollFactor(0);
+    ui_layer.add(sheet);
+
+    const text_style = {
+      color: "#888888",
+      fontFamily: Consts.FONT,
+      fontSize: "20px",
+    };
+
+    ui_layer.add(
+      this.add
+        .text(sheet.x + 16, sheet.y + 8, "grocery list", text_style)
+        .setOrigin(0, 0)
+        .setScrollFactor(0)
+    );
+
+    const items = GroceryList.get().getItemStrings();
+    let i = 0;
+    for (let type of items.keys()) {
+      console.log(items.get(type));
+      let item = this.add
+        .text(
+          sheet.x + 16,
+          sheet.y + 24 + 16 + i * 24,
+          "- " + items.get(type),
+          text_style
+        )
+        .setOrigin(0, 0)
+        .setScrollFactor(0);
+      this.groceryList.set(type, item);
+      ui_layer.add(item);
+      i++;
+    }
+
+    ui_layer.sendToBack(sheet);
   }
 
   private setUpInteractables(): void {
@@ -168,7 +221,12 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.interactables.forEach((i) =>
-      i.on("list_complete", this.triggerGameWin)
+      i.on("list_updated", () => {
+        this.groceryList.get(i.type).setColor("#bbbbbb");
+        if (GroceryList.get().isFinished()) {
+          this.triggerGameWin();
+        }
+      })
     );
 
     this.add.group(this.interactables.map((i) => i.highlight)).setDepth(4);
@@ -263,6 +321,14 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.player.getSprite().play("player_idle_front_left");
+  }
+
+  private setUpEvents(): void {
+    this.player.on("game_over", this.triggerGameOver);
+  }
+
+  private triggerGameOver(): void {
+    console.log("game over");
   }
 
   private triggerGameWin(): void {
