@@ -6,4 +6,5 @@ export namespace Assets {
   }
 
   export const PLAYER = "player";
+  export const NPC = "npc";
 }

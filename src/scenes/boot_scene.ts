@@ -23,6 +23,11 @@ export class BootScene extends Phaser.Scene {
       frameHeight: 64,
     });
 
+    this.load.spritesheet(Assets.NPC, "assets/characters/radishmascot.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+
     // Tilemap
     this.load.image(Assets.Tilemap.TILESET_IMG, "assets/maps/tileset.png");
     this.load.tilemapTiledJSON(
