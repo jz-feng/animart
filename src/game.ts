@@ -12,7 +12,6 @@ const config: GameConfig = {
   height: Consts.GAME_HEIGHT,
   type: Phaser.AUTO,
   parent: "game",
-  pixelArt: true,
   scene: [BootScene, TitleScene, GameScene],
   input: {
     keyboard: true,
@@ -23,6 +22,9 @@ const config: GameConfig = {
     arcade: {
       debug: true,
     },
+  },
+  render: {
+    pixelArt: true,
   },
 };
 

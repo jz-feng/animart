@@ -8,6 +8,7 @@ import { MoveAI } from "./move_ai";
 export class NPC extends Movable {
   private moveAI: MoveAI;
   private hasInteracted: boolean = false;
+  private alert: GameObjects.Text;
 
   constructor(
     scene: GameScene,
@@ -24,10 +25,35 @@ export class NPC extends Movable {
     this.moveAI = moveAI;
 
     this.sprite.setFrame(0);
+
+    this.alert = scene.add
+      .text(0, 0, "!", {
+        color: "#ff8888",
+        fontFamily: Consts.FONT,
+        fontSize: "48px",
+        // stroke: "#444444",
+        // strokeThickness: 5,
+      })
+      .setOrigin(0, 0)
+      .setVisible(false);
+
+    // scene.add.tween({
+    //   targets: this.alert,
+    //   y: 0,
+    //   ease: "Linear",
+    //   yoyo: true,
+    //   repeat: -1,
+    // });
   }
 
   public update(): void {
     super.update();
+
+    // Dumb way to follow the sprite
+    this.alert.setPosition(
+      this.sprite.body.position.x - 32,
+      this.sprite.body.position.y - 64
+    );
 
     this.checkCanSeePlayer();
   }
@@ -53,19 +79,41 @@ export class NPC extends Movable {
   }
 
   public triggerConvo(): void {
-    super.triggerConvo();
-
+    this.moveState = MoveState.Seeking;
     this.hasInteracted = true;
-    this.sprite.setTintFill(0xff0000);
+    this.alert.setVisible(true);
   }
 
   public endConvo(): void {
     super.endConvo();
 
+    this.alert.setVisible(false);
     this.sprite.setTintFill(0x0000ff);
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
+    if (this.moveState === MoveState.Seeking) {
+      return this.getMovementTowardPlayer();
+    }
     return this.moveAI.getMovement();
+  }
+
+  protected getMovementTowardPlayer(): Math.Vector2 {
+    let player_pos = (
+      (this.scene as GameScene).getPlayer().getSprite().body
+        .position as Math.Vector2
+    ).clone();
+    if (
+      Math.Distance.BetweenPoints(player_pos, this.sprite.body.position) <=
+      Consts.TILE_SIZE
+    ) {
+      this.moveState = MoveState.Talking;
+      return Math.Vector2.ZERO;
+    } else {
+      return player_pos
+        .subtract(this.sprite.body.position)
+        .normalize()
+        .scale(256);
+    }
   }
 }

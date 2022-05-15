@@ -67,6 +67,6 @@ export class Player extends Movable {
       this.sprite.anims.play(anim_str, true);
     }
 
-    return direction.scale(Player.moveSpeed);
+    return direction.normalize().scale(Player.moveSpeed);
   }
 }
