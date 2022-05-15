@@ -1,3 +1,4 @@
+import { Math } from "phaser";
 import { Consts } from "../consts";
 import { Movable } from "./movable";
 
@@ -26,8 +27,8 @@ export class Player extends Movable {
     super.update();
   }
 
-  protected getMovement(): Phaser.Math.Vector2 {
-    let direction = new Phaser.Math.Vector2();
+  protected getMovement(): Math.Vector2 {
+    let direction = new Math.Vector2();
     if (this.cursors.up.isDown) {
       direction.y = -1;
     } else if (this.cursors.down.isDown) {
