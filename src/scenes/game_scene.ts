@@ -55,7 +55,7 @@ export class GameScene extends Phaser.Scene {
     // Set collision for all tiles on collision layer. NOTE: only include non-empty tiles
     this.collisionLayer.setCollisionBetween(0, 5, true);
 
-    this.player = new Player(this);
+    this.player = new Player(this, Utils.tilesToPixels(14, 19));
 
     this.camera = this.cameras.main;
     this.camera.startFollow(this.player.getSprite());
@@ -87,6 +87,7 @@ export class GameScene extends Phaser.Scene {
     this.setUpInputs();
     this.setUpUI();
     this.setUpInteractables();
+    this.setUpAnimations();
   }
 
   update(): void {
@@ -148,5 +149,46 @@ export class GameScene extends Phaser.Scene {
         }
       }
     }
+  }
+
+  private setUpAnimations(): void {
+    this.anims.create({
+      key: "player_idle_front_left",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_idle_front_right",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 4,
+        end: 7,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_idle_back_left",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 12,
+        end: 15,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_idle_back_right",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 8,
+        end: 11,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.player.getSprite().play("player_idle_front_left");
   }
 }
