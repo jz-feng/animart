@@ -4,6 +4,7 @@ import { Consts } from "../consts";
 export enum MoveState {
   Free,
   Talking,
+  Seeking,
 }
 
 export abstract class Movable extends GameObjects.GameObject {
