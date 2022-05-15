@@ -11,15 +11,10 @@ export class Player extends Movable {
   public static MAX_ENERGY = 100;
   private energy = Player.MAX_ENERGY;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: Phaser.Scene, location: Math.Vector2) {
     super(
       scene,
-      scene.add.sprite(
-        Consts.GAME_WIDTH / 2,
-        Consts.GAME_HEIGHT / 2,
-        Assets.PLAYER,
-        0
-      ),
+      scene.add.sprite(location.x, location.y, Assets.PLAYER, 0),
       "player"
     );
 
@@ -44,16 +39,30 @@ export class Player extends Movable {
     let direction = new Math.Vector2();
     if (this.cursors.up.isDown) {
       direction.y = -1;
-      this.sprite.setFrame(1);
     } else if (this.cursors.down.isDown) {
       direction.y = 1;
-      this.sprite.setFrame(0);
     }
     if (this.cursors.left.isDown) {
       direction.x = -1;
     } else if (this.cursors.right.isDown) {
       direction.x = 1;
     }
+
+    let anim_str = "player_idle_";
+    if (direction.y === -1) {
+      anim_str += "back_right";
+    } else if (direction.y === 1) {
+      anim_str += "front_left";
+    } else if (direction.x === 1 && direction.y === 1) {
+      anim_str += "front_right";
+    } else if (direction.x === -1 && direction.y === -1) {
+      anim_str += "back_left";
+    }
+
+    if (anim_str !== "player_idle_") {
+      this.sprite.anims.play(anim_str, true);
+    }
+
     return direction.scale(Player.moveSpeed);
   }
 }

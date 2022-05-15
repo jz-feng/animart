@@ -1,4 +1,4 @@
-import { GameObjects, Math } from "phaser";
+import { GameObjects, Math, Physics } from "phaser";
 import { Consts } from "../consts";
 
 export enum MoveState {
@@ -19,6 +19,7 @@ export abstract class Movable extends GameObjects.GameObject {
     this.sprite.setOrigin(0, 0);
 
     scene.physics.add.existing(this.sprite, false);
+    (this.sprite.body as Physics.Arcade.Body).setSize(64, 32).setOffset(0, 32);
   }
 
   public update(): void {
