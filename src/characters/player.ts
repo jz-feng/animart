@@ -1,4 +1,4 @@
-import { Math } from "phaser";
+import { Math, Sound } from "phaser";
 import { Assets } from "../assets";
 import { Movable } from "./movable";
 
@@ -12,6 +12,10 @@ export class Player extends Movable {
   public static MAX_ENERGY = 100;
   private energy = Player.MAX_ENERGY;
 
+  // sound
+  private energyLostSound: Sound.BaseSound;
+  private gameOverSound: Sound.BaseSound;
+
   constructor(scene: Phaser.Scene, location: Math.Vector2) {
     super(
       scene,
@@ -20,6 +24,10 @@ export class Player extends Movable {
     );
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    // sound
+    this.energyLostSound = scene.sound.add("energyLost");
+    this.gameOverSound = scene.sound.add("gameOverMeow");
   }
 
   public update(): void {
@@ -34,8 +42,10 @@ export class Player extends Movable {
     super.endConvo();
 
     this.energy -= 10;
+    this.energyLostSound.play();
 
     if (this.energy <= 0) {
+      this.gameOverSound.play();
       this.emit("game_over");
     }
   }
