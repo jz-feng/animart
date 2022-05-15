@@ -117,21 +117,55 @@ export class GameScene extends Phaser.Scene {
     this.interactables.push(
       new Interactable(
         this,
-        Utils.tilesToPixels(16, 14),
-        InteractableType.Basket
+        InteractableType.Basket,
+        Utils.tilesToPixels(16, 14)
       ),
       new Interactable(
         this,
-        Utils.tilesToPixels(17, 14),
-        InteractableType.Basket
+        InteractableType.Basket,
+        Utils.tilesToPixels(17, 14)
       ),
-      new Interactable(this, Utils.tilesToPixels(9, 2), InteractableType.Milk)
+      new Interactable(
+        this,
+        InteractableType.Milk,
+        Utils.tilesToPixels(9, 1),
+        new Math.Vector2(Consts.TILE_SIZE, Consts.TILE_SIZE * 2)
+      ),
+      new Interactable(
+        this,
+        InteractableType.Radish,
+        Utils.tilesToPixels(16, 9)
+      ),
+      new Interactable(
+        this,
+        InteractableType.CatFood,
+        Utils.tilesToPixels(1, 5)
+      ),
+      new Interactable(
+        this,
+        InteractableType.Yarn,
+        Utils.tilesToPixels(7, 4),
+        new Math.Vector2(Consts.TILE_SIZE / 2, Consts.TILE_SIZE * 2)
+      ),
+      new Interactable(
+        this,
+        InteractableType.Checkout,
+        Utils.tilesToPixels(4, 10),
+        new Math.Vector2(Consts.TILE_SIZE / 2, Consts.TILE_SIZE),
+        new Math.Vector2(Consts.TILE_SIZE / 2, 0)
+      )
     );
 
     this.physics.add.overlap(
       this.interactables.map((i) => i.highlight),
       this.player.getSprite()
     );
+
+    this.interactables.forEach((i) =>
+      i.on("list_complete", this.triggerGameWin)
+    );
+
+    this.add.group(this.interactables.map((i) => i.highlight)).setDepth(4);
   }
 
   private checkInteract(): void {
@@ -223,5 +257,9 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.player.getSprite().play("player_idle_front_left");
+  }
+
+  private triggerGameWin(): void {
+    console.log("list complete");
   }
 }
