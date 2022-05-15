@@ -17,6 +17,8 @@ export class NPC extends Movable {
   private dialogSentences: string[];
   private currSetenceIndex = 1;
 
+  private lastDirection = Math.Vector2.ZERO;
+
   // sound
   private spottedSound: Sound.BaseSound;
   private speechSounds: Sound.BaseSound[] = [];
@@ -94,6 +96,8 @@ export class NPC extends Movable {
       .setDepth(3);
 
     this.dialogSentences = dialogText;
+
+    this.sprite.play("npc_idle_front");
   }
 
   public update(): void {
@@ -169,10 +173,32 @@ export class NPC extends Movable {
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
+    let movement;
     if (this.moveState === MoveState.Seeking) {
-      return this.getMovementTowardPlayer();
+      movement = this.getMovementTowardPlayer();
+    } else {
+      movement = this.moveAI.getMovement();
     }
-    return this.moveAI.getMovement();
+
+    let anim_str = "npc_";
+    if (movement.equals(Math.Vector2.ZERO)) {
+      anim_str += "idle_";
+    } else {
+      this.lastDirection = movement.clone();
+      anim_str += "walk_";
+    }
+
+    if (this.lastDirection.y > 0) {
+      anim_str += "front";
+    } else if (this.lastDirection.y < 0) {
+      anim_str += "back";
+    }
+
+    // lol
+    if (anim_str.length > 12) {
+      this.sprite.anims.play(anim_str, true);
+    }
+    return movement;
   }
 
   protected getMovementTowardPlayer(): Math.Vector2 {

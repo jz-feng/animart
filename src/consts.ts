@@ -4,7 +4,7 @@ export namespace Consts {
   export const DEV = "development";
 
   export namespace Colors {
-    export const BACKGROUND = "#eef2c3";
+    export const BACKGROUND = "#ece9c7";
   }
 
   export const TILE_SIZE = 64;

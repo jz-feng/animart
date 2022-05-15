@@ -372,6 +372,61 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.player.getSprite().play("player_idle_front_left");
+
+    this.anims.create({
+      key: "npc_idle_front",
+      frames: this.anims.generateFrameNumbers(Assets.NPC, {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "npc_idle_back",
+      frames: this.anims.generateFrameNumbers(Assets.NPC, {
+        start: 8,
+        end: 11,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "npc_walk_front",
+      frames: this.anims.generateFrameNumbers(Assets.NPC, {
+        start: 16,
+        end: 19,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    // this.anims.create({
+    //   key: "npc_walk_front_right",
+    //   frames: this.anims.generateFrameNumbers(Assets.NPC, {
+    //     start: 20,
+    //     end: 23,
+    //   }),
+    //   frameRate: 8,
+    //   repeat: -1,
+    // });
+    this.anims.create({
+      key: "npc_walk_back",
+      frames: this.anims.generateFrameNumbers(Assets.NPC, {
+        start: 24,
+        end: 27,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    // this.anims.create({
+    //   key: "npc_walk_back_right",
+    //   frames: this.anims.generateFrameNumbers(Assets.NPC, {
+    //     start: 28,
+    //     end: 31,
+    //   }),
+    //   frameRate: 8,
+    //   repeat: -1,
+    // });
   }
 
   private setUpEvents(): void {
