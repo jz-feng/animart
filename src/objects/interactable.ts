@@ -1,4 +1,4 @@
-import { Events, GameObjects, Geom, Math, Physics } from "phaser";
+import { Events, GameObjects, Geom, Math, Physics, Sound } from "phaser";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
 import { GroceryList } from "./grocery_list";
@@ -17,6 +17,8 @@ export class Interactable extends Events.EventEmitter {
   private location: Math.Vector2;
   type: InteractableType;
   highlight: GameObjects.Rectangle;
+
+  private successSound: Sound.BaseSound;
 
   constructor(
     scene: GameScene,
@@ -50,6 +52,8 @@ export class Interactable extends Events.EventEmitter {
       size.y + 16,
       true
     );
+
+    this.successSound = scene.sound.add("success");
   }
 
   public interact(): boolean {
@@ -66,6 +70,7 @@ export class Interactable extends Events.EventEmitter {
       this.highlight.setVisible(false);
 
       list.completeItem();
+      this.successSound.play();
       this.emit("list_updated");
 
       return true;
