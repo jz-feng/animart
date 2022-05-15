@@ -1,7 +1,8 @@
-import { GameObjects, Math, Sound, Time } from "phaser";
+import { GameObjects, LEFT, Math, Sound, Time } from "phaser";
 import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
+import { Utils } from "../utils";
 import { Movable, MoveState } from "./movable";
 import { MoveAI } from "./move_ai";
 
@@ -11,6 +12,11 @@ export class NPC extends Movable {
   private alert: GameObjects.Text;
   private cooldown: Time.TimerEvent;
 
+  private dialogBox: GameObjects.Rectangle;
+  private dialogText: GameObjects.Text;
+  private dialogSentences: string[];
+  private currSetenceIndex = 1;
+
   // sound
   private spottedSound: Sound.BaseSound;
 
@@ -18,6 +24,7 @@ export class NPC extends Movable {
     scene: GameScene,
     location: Math.Vector2,
     moveAI: MoveAI,
+    dialogText: string[],
     canSee: boolean
   ) {
     super(
@@ -54,6 +61,30 @@ export class NPC extends Movable {
 
     // sound
     this.spottedSound = scene.sound.add("spotted");
+
+    this.dialogBox = scene.add
+      .rectangle(0, 0, Consts.TILE_SIZE * 7, Consts.TILE_SIZE * 3, 0xffffff)
+      .setOrigin(0, 0)
+      .setStrokeStyle(2, 0x888888)
+      .setVisible(false)
+      .setDepth(3);
+
+    this.dialogText = scene.add
+      .text(0, 0, "", {
+        color: "#888888",
+        fontFamily: Consts.FONT,
+        fontSize: "24px",
+        align: "left",
+        wordWrap: {
+          width: Consts.TILE_SIZE * 7 - 32,
+          useAdvancedWrap: true,
+        },
+      })
+      .setOrigin(0, 0)
+      .setVisible(false)
+      .setDepth(3);
+
+    this.dialogSentences = dialogText;
   }
 
   public update(): void {
@@ -96,12 +127,32 @@ export class NPC extends Movable {
     this.alert.setVisible(true);
   }
 
+  public continueConvo(): void {
+    if (this.currSetenceIndex < this.dialogSentences.length) {
+      this.currSetenceIndex++;
+      this.updateDialogText();
+    } else {
+      this.endConvo();
+    }
+  }
+
+  private updateDialogText(): void {
+    this.dialogText.setText(
+      this.dialogSentences
+        .slice(0, this.currSetenceIndex)
+        .reduce((a, b) => a + b)
+    );
+  }
+
   public endConvo(): void {
     super.endConvo();
+
+    (this.scene as GameScene).triggerEndConvo();
 
     this.cooldown = this.scene.time.addEvent({ delay: 5000 });
 
     this.alert.setVisible(false);
+    this.hideDialog();
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
@@ -121,6 +172,9 @@ export class NPC extends Movable {
       Consts.TILE_SIZE
     ) {
       this.moveState = MoveState.Talking;
+      if (!this.dialogBox.visible) {
+        this.showDialog();
+      }
       return Math.Vector2.ZERO;
     } else {
       return player_pos
@@ -128,5 +182,24 @@ export class NPC extends Movable {
         .normalize()
         .scale(200);
     }
+  }
+
+  private showDialog(): void {
+    this.dialogBox
+      .setPosition(
+        this.sprite.x - Consts.TILE_SIZE * 3,
+        this.sprite.y - Consts.TILE_SIZE * 3
+      )
+      .setVisible(true);
+    this.dialogText
+      .setPosition(this.dialogBox.x + 16, this.dialogBox.y + 16)
+      .setVisible(true);
+    this.updateDialogText();
+  }
+
+  private hideDialog(): void {
+    this.dialogBox.setVisible(false);
+    this.dialogText.setVisible(false);
+    this.currSetenceIndex = 1;
   }
 }

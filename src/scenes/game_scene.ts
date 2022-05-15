@@ -91,19 +91,50 @@ export class GameScene extends Phaser.Scene {
 
   private setUpNPCs(): void {
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(3, 3), new MoveAI(this, 128), true)
+      new NPC(
+        this,
+        Utils.tilesToPixels(3, 3),
+        new MoveAI(this, 128),
+        Assets.Text.T5,
+        true
+      )
     );
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(8, 6), new MoveAI(this, 128), true)
+      new NPC(
+        this,
+        Utils.tilesToPixels(8, 6),
+        new MoveAI(this, 128),
+        Assets.Text.T4,
+        true
+      )
     );
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(15, 6), new MoveAI(this, 128), true)
+      new NPC(
+        this,
+        Utils.tilesToPixels(15, 6),
+        new MoveAI(this, 128),
+        Assets.Text.T3,
+        true
+      )
     );
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(2, 11), new MoveAI(this, 128), true)
+      new NPC(
+        this,
+        Utils.tilesToPixels(2, 11),
+        new MoveAI(this, 128),
+        Assets.Text.T2,
+        true
+      )
     );
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(13, 12), new MoveAI(this, 128), true)
+      // stands by the door
+      new NPC(
+        this,
+        Utils.tilesToPixels(13, 12),
+        new MoveAI(this, 128),
+        Assets.Text.T1,
+        true
+      )
     );
 
     this.npcs.forEach((npc) =>
@@ -114,14 +145,17 @@ export class GameScene extends Phaser.Scene {
   private setUpInputs(): void {
     this.input.keyboard.on("keydown-SPACE", () => {
       if (!this.player.canMove()) {
-        this.player.endConvo();
         this.npcs.forEach((npc) => {
-          if (!npc.canMove()) npc.endConvo();
+          if (!npc.canMove()) npc.continueConvo();
         });
       }
     });
 
     this.input.keyboard.on("keydown-E", () => this.checkInteract());
+  }
+
+  public triggerEndConvo(): void {
+    this.player.endConvo();
   }
 
   private setUpUI(): void {
