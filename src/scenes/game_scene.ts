@@ -3,14 +3,16 @@ import { MoveAI } from "../characters/move_ai";
 import { NPC } from "../characters/npc";
 import { Player } from "../characters/player";
 import { Assets } from "../assets";
-import { GameObjects, Tilemaps } from "phaser";
-import { MoveState } from "../characters/movable";
+import { GameObjects, Math, Tilemaps } from "phaser";
+import { Interactable, InteractableType } from "../objects/interactable";
+import { Utils } from "../utils";
 
 export class GameScene extends Phaser.Scene {
   private camera: Phaser.Cameras.Scene2D.Camera;
 
   private player: Player;
   private npcs: NPC[] = [];
+  private interactables: Interactable[] = [];
 
   private energyBar: GameObjects.Rectangle;
 
@@ -84,6 +86,7 @@ export class GameScene extends Phaser.Scene {
 
     this.setUpInputs();
     this.setUpUI();
+    this.setUpInteractables();
   }
 
   update(): void {
@@ -99,13 +102,15 @@ export class GameScene extends Phaser.Scene {
 
   private setUpInputs(): void {
     this.input.keyboard.on("keydown-SPACE", () => {
-      if (this.player.getState() === MoveState.Talking) {
+      if (!this.player.canMove()) {
         this.player.endConvo();
         this.npcs.forEach((npc) => {
-          if (npc.getState() === MoveState.Talking) npc.endConvo();
+          if (!npc.canMove()) npc.endConvo();
         });
       }
     });
+
+    this.input.keyboard.on("keydown-E", () => this.checkInteract());
   }
 
   private setUpUI(): void {
@@ -117,5 +122,31 @@ export class GameScene extends Phaser.Scene {
     this.energyBar.setScrollFactor(0);
     ui_layer.add(this.energyBar);
     // ui_layer.getChildren().forEach(c => c.set)
+  }
+
+  private setUpInteractables(): void {
+    this.interactables.push(
+      new Interactable(this, Utils.tilesToPixels(1, 2), InteractableType.Milk),
+      new Interactable(this, Utils.tilesToPixels(5, 6), InteractableType.Toy)
+    );
+
+    this.physics.add.overlap(
+      this.interactables.map((i) => i.highlight),
+      this.player.getSprite()
+    );
+  }
+
+  private checkInteract(): void {
+    if (this.player.canMove()) {
+      // Find which object the player is interacting with
+      for (let index in this.interactables) {
+        const i = this.interactables[index];
+        const success = i.interact();
+        if (success) {
+          console.log(i.type);
+          break;
+        }
+      }
+    }
   }
 }

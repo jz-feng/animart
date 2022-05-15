@@ -29,6 +29,10 @@ export abstract class Movable extends GameObjects.GameObject {
     return this.sprite;
   }
 
+  public canMove(): boolean {
+    return this.moveState === MoveState.Free;
+  }
+
   public getState(): MoveState {
     return this.moveState;
   }
