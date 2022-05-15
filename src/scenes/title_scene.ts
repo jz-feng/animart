@@ -29,7 +29,7 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.add
-      .text(Consts.GAME_WIDTH / 2, Consts.TILE_SIZE * 8, "press space", {
+      .text(Consts.GAME_WIDTH / 2, Consts.TILE_SIZE * 6, "press space", {
         color: "#ffffff",
         fontFamily: Consts.FONT,
         fontSize: "32px",
