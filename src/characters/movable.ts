@@ -9,7 +9,7 @@ export enum MoveState {
 
 export abstract class Movable extends GameObjects.GameObject {
   protected sprite: GameObjects.Sprite;
-  protected moveState: MoveState = MoveState.Free;
+  public moveState: MoveState = MoveState.Free;
 
   private currVelocity = new Math.Vector2();
 

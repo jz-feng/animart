@@ -16,7 +16,7 @@ export class BootScene extends Phaser.Scene {
     this.load.addFile(new WebFontFile(this.load, Consts.FONT));
 
     // images
-    // this.load.image("foo", "assets/foo.png");
+    this.load.image("title", "assets/title.png");
 
     this.load.spritesheet(Assets.PLAYER, "assets/characters/player.png", {
       frameWidth: 64,

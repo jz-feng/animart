@@ -45,8 +45,8 @@ export class Player extends Movable {
     this.energyLostSound.play();
 
     if (this.energy <= 0) {
-      this.gameOverSound.play();
-      this.emit("game_over");
+      // this.gameOverSound.play();
+      // this.emit("game_over");
     }
   }
 

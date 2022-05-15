@@ -7,6 +7,7 @@ import { GameObjects, Math, Sound, Tilemaps } from "phaser";
 import { Interactable, InteractableType } from "../objects/interactable";
 import { Utils } from "../utils";
 import { GroceryList } from "../objects/grocery_list";
+import { MoveState } from "../characters/movable";
 
 export class GameScene extends Phaser.Scene {
   private camera: Phaser.Cameras.Scene2D.Camera;
@@ -82,7 +83,7 @@ export class GameScene extends Phaser.Scene {
     this.player.update();
     this.npcs.forEach((npc) => npc.update());
 
-    this.energyBar.setScale(this.player.getEnergy() / Player.MAX_ENERGY, 1);
+    // this.energyBar.setScale(this.player.getEnergy() / Player.MAX_ENERGY, 1);
   }
 
   getPlayer(): Player {
@@ -170,7 +171,8 @@ export class GameScene extends Phaser.Scene {
     this.energyBar = this.add
       .rectangle(Consts.TILE_SIZE * 8, 32, Consts.TILE_SIZE * 3.5, 32, 0xeebbcc)
       .setOrigin(0, 0)
-      .setScrollFactor(0);
+      .setScrollFactor(0)
+      .setVisible(false);
     ui_layer.add(this.energyBar);
     ui_layer.setDepth(10);
 
@@ -273,7 +275,7 @@ export class GameScene extends Phaser.Scene {
       i.on("list_updated", () => {
         this.groceryList.get(i.type).setColor("#bbbbbb");
         if (GroceryList.get().isFinished()) {
-          this.triggerGameWin();
+          // this.triggerGameWin();
         }
       })
     );
@@ -373,14 +375,43 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setUpEvents(): void {
-    this.player.on("game_over", this.triggerGameOver);
+    this.player.on("game_over", () => this.triggerGameOver());
   }
 
   private triggerGameOver(): void {
-    console.log("game over");
+    let game_over = this.add
+      .text(Consts.GAME_WIDTH / 2, Consts.GAME_HEIGHT / 2, "Game Over", {
+        color: "#fde9dd",
+        fontFamily: Consts.FONT,
+        fontSize: "64px",
+        stroke: "#888888",
+        strokeThickness: 2,
+      })
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0);
+    // this.add.tween({
+    //   targets: game_over,
+    //   alpha: 0,
+    // });
+    this.player.moveState = MoveState.Talking;
   }
 
   private triggerGameWin(): void {
+    let complete = this.add
+      .text(
+        Consts.GAME_WIDTH / 2,
+        Consts.GAME_HEIGHT / 2,
+        "Shopping Complete",
+        {
+          color: "#fde9dd",
+          fontFamily: Consts.FONT,
+          fontSize: "64px",
+          stroke: "#888888",
+          strokeThickness: 2,
+        }
+      )
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0);
     console.log("list complete");
   }
 }

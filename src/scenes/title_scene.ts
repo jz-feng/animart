@@ -12,31 +12,33 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
-    let title = this.add
-      .text(Consts.GAME_WIDTH / 2, Consts.GAME_HEIGHT / 2, "title", {
+    // let title = this.add
+    //   .text(Consts.GAME_WIDTH / 2, Consts.GAME_HEIGHT / 2, "title", {
+    //     color: "#ffffff",
+    //     fontFamily: Consts.FONT,
+    //     fontSize: "128px",
+    //   })
+    //   .setOrigin(0.5, 0.5);
+
+    this.add.image(0, 0, "title").setOrigin(0, 0);
+
+    let start = this.add
+      .text(210, 360, "press space", {
         color: "#ffffff",
         fontFamily: Consts.FONT,
-        fontSize: "128px",
+        fontSize: "32px",
       })
       .setOrigin(0.5, 0.5);
 
     this.add.tween({
-      targets: title,
-      y: Consts.GAME_HEIGHT / 2 - 16,
+      targets: start,
+      y: 360 - 16,
       ease: "Linear",
       yoyo: true,
       hold: 500,
       repeat: -1,
       repeatDelay: 500,
     });
-
-    this.add
-      .text(Consts.GAME_WIDTH / 2, Consts.TILE_SIZE * 6, "press space", {
-        color: "#ffffff",
-        fontFamily: Consts.FONT,
-        fontSize: "32px",
-      })
-      .setOrigin(0.5, 0.5);
 
     this.input.keyboard.on("keydown-SPACE", () => this.startGame());
 
