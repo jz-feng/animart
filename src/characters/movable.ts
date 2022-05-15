@@ -1,16 +1,18 @@
 import { GameObjects, Math } from "phaser";
 import { Consts } from "../consts";
 
+export enum MoveState {
+  Free,
+  Talking,
+}
+
 export abstract class Movable extends GameObjects.GameObject {
-  protected sprite: GameObjects.Rectangle;
+  protected sprite: GameObjects.Sprite;
+  protected moveState: MoveState = MoveState.Free;
 
   private currVelocity = new Math.Vector2();
 
-  constructor(
-    scene: Phaser.Scene,
-    sprite: GameObjects.Rectangle,
-    type: string
-  ) {
+  constructor(scene: Phaser.Scene, sprite: GameObjects.Sprite, type: string) {
     super(scene, type);
 
     this.sprite = sprite;
@@ -23,14 +25,29 @@ export abstract class Movable extends GameObjects.GameObject {
     this.move();
   }
 
-  public getSprite(): GameObjects.Rectangle {
+  public getSprite(): GameObjects.Sprite {
     return this.sprite;
   }
 
+  public getState(): MoveState {
+    return this.moveState;
+  }
+
+  public triggerConvo(): void {
+    this.moveState = MoveState.Talking;
+  }
+
+  public endConvo(): void {
+    this.moveState = MoveState.Free;
+  }
+
   protected move(): void {
-    this.currVelocity = this.getMovement();
-    if (this.sprite.body instanceof Phaser.Physics.Arcade.Body) {
-      this.sprite.body.setVelocity(this.currVelocity.x, this.currVelocity.y);
+    let body = this.sprite.body as Phaser.Physics.Arcade.Body;
+    if (this.moveState === MoveState.Talking) {
+      body.setVelocity(0, 0);
+    } else {
+      this.currVelocity = this.getMovement();
+      body.setVelocity(this.currVelocity.x, this.currVelocity.y);
     }
   }
 

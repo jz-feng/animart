@@ -13,15 +13,15 @@ export class BootScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
     // font
-    // this.load.addFile(new WebFontFile(this.load, Consts.FONT));
+    this.load.addFile(new WebFontFile(this.load, Consts.FONT));
 
     // images
     // this.load.image("foo", "assets/foo.png");
 
-    // this.load.spritesheet("bar", "assets/bar.png", {
-    //   frameWidth: 64,
-    //   frameHeight: 64,
-    // });
+    this.load.spritesheet(Assets.PLAYER, "assets/characters/player.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
 
     // Tilemap
     this.load.image(Assets.Tilemap.TILESET_IMG, "assets/maps/tileset.png");

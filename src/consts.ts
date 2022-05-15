@@ -1,5 +1,5 @@
 export namespace Consts {
-  export const FONT = "";
+  export const FONT = "VT323";
 
   export const DEV = "development";
 

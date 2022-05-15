@@ -1,3 +1,5 @@
+import { Math } from "phaser";
+import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { Movable } from "./movable";
 
@@ -6,15 +8,17 @@ export class Player extends Movable {
 
   private static moveSpeed = 256;
 
+  public static MAX_ENERGY = 100;
+  private energy = Player.MAX_ENERGY;
+
   constructor(scene: Phaser.Scene) {
     super(
       scene,
-      scene.add.rectangle(
+      scene.add.sprite(
         Consts.GAME_WIDTH / 2,
         Consts.GAME_HEIGHT / 2,
-        Consts.TILE_SIZE,
-        Consts.TILE_SIZE,
-        0xffffff
+        Assets.PLAYER,
+        0
       ),
       "player"
     );
@@ -26,12 +30,24 @@ export class Player extends Movable {
     super.update();
   }
 
-  protected getMovement(): Phaser.Math.Vector2 {
-    let direction = new Phaser.Math.Vector2();
+  public getEnergy(): number {
+    return this.energy;
+  }
+
+  public endConvo(): void {
+    super.endConvo();
+
+    this.energy -= 10;
+  }
+
+  protected getMovement(): Math.Vector2 {
+    let direction = new Math.Vector2();
     if (this.cursors.up.isDown) {
       direction.y = -1;
+      this.sprite.setFrame(1);
     } else if (this.cursors.down.isDown) {
       direction.y = 1;
+      this.sprite.setFrame(0);
     }
     if (this.cursors.left.isDown) {
       direction.x = -1;
