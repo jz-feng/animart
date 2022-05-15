@@ -4,7 +4,11 @@ import { GameScene } from "../scenes/game_scene";
 
 export enum InteractableType {
   Milk,
-  Toy,
+  Radish,
+  CatFood,
+  Yarn,
+  Basket,
+  Checkout,
 }
 
 export class Interactable {

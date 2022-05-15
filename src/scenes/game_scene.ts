@@ -115,8 +115,17 @@ export class GameScene extends Phaser.Scene {
 
   private setUpInteractables(): void {
     this.interactables.push(
-      new Interactable(this, Utils.tilesToPixels(1, 2), InteractableType.Milk),
-      new Interactable(this, Utils.tilesToPixels(5, 6), InteractableType.Toy)
+      new Interactable(
+        this,
+        Utils.tilesToPixels(16, 14),
+        InteractableType.Basket
+      ),
+      new Interactable(
+        this,
+        Utils.tilesToPixels(17, 14),
+        InteractableType.Basket
+      ),
+      new Interactable(this, Utils.tilesToPixels(9, 2), InteractableType.Milk)
     );
 
     this.physics.add.overlap(
@@ -172,6 +181,42 @@ export class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
         start: 8,
         end: 11,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_walk_front_left",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 16,
+        end: 19,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_walk_front_right",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 20,
+        end: 23,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_walk_back_left",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 28,
+        end: 31,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "player_walk_back_right",
+      frames: this.anims.generateFrameNumbers(Assets.PLAYER, {
+        start: 24,
+        end: 27,
       }),
       frameRate: 8,
       repeat: -1,
