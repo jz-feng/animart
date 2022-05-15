@@ -8,6 +8,9 @@ export class Player extends Movable {
 
   private static moveSpeed = 256;
 
+  public static MAX_ENERGY = 100;
+  private energy = Player.MAX_ENERGY;
+
   constructor(scene: Phaser.Scene) {
     super(
       scene,
@@ -25,6 +28,16 @@ export class Player extends Movable {
 
   public update(): void {
     super.update();
+  }
+
+  public getEnergy(): number {
+    return this.energy;
+  }
+
+  public endConvo(): void {
+    super.endConvo();
+
+    this.energy -= 10;
   }
 
   protected getMovement(): Math.Vector2 {

@@ -3,7 +3,7 @@ import { MoveAI } from "../characters/move_ai";
 import { NPC } from "../characters/npc";
 import { Player } from "../characters/player";
 import { Assets } from "../assets";
-import { Tilemaps } from "phaser";
+import { GameObjects, Tilemaps } from "phaser";
 import { MoveState } from "../characters/movable";
 
 export class GameScene extends Phaser.Scene {
@@ -11,6 +11,8 @@ export class GameScene extends Phaser.Scene {
 
   private player: Player;
   private npcs: NPC[] = [];
+
+  private energyBar: GameObjects.Rectangle;
 
   public collisionLayer: Tilemaps.TilemapLayer;
 
@@ -81,11 +83,14 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.setUpInputs();
+    this.setUpUI();
   }
 
   update(): void {
     this.player.update();
     this.npcs.forEach((npc) => npc.update());
+
+    this.energyBar.setScale(this.player.getEnergy() / Player.MAX_ENERGY, 1);
   }
 
   getPlayer(): Player {
@@ -101,5 +106,16 @@ export class GameScene extends Phaser.Scene {
         });
       }
     });
+  }
+
+  private setUpUI(): void {
+    let ui_layer = this.add.group();
+
+    this.energyBar = this.add
+      .rectangle(Consts.TILE_SIZE * 11, 32, Consts.TILE_SIZE * 4, 32, 0xffffff)
+      .setOrigin(0, 0);
+    this.energyBar.setScrollFactor(0);
+    ui_layer.add(this.energyBar);
+    // ui_layer.getChildren().forEach(c => c.set)
   }
 }
