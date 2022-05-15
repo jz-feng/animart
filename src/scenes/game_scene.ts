@@ -63,21 +63,11 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player.getSprite(), this.collisionLayer);
 
     this.npcs.push(
-      new NPC(
-        this,
-        this.add.sprite(256, 256, Assets.PLAYER),
-        new MoveAI(this, 128),
-        true
-      )
+      new NPC(this, Utils.tilesToPixels(3, 3), new MoveAI(this, 128), true)
     );
 
     this.npcs.push(
-      new NPC(
-        this,
-        this.add.sprite(512, 200, Assets.PLAYER),
-        new MoveAI(this, 128),
-        true
-      )
+      new NPC(this, Utils.tilesToPixels(5, 3), new MoveAI(this, 128), true)
     );
 
     this.npcs.forEach((npc) =>

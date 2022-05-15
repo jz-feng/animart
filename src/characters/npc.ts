@@ -1,4 +1,5 @@
-import { GameObjects } from "phaser";
+import { GameObjects, Math } from "phaser";
+import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
 import { Movable, MoveState } from "./movable";
@@ -10,13 +11,19 @@ export class NPC extends Movable {
 
   constructor(
     scene: GameScene,
-    sprite: GameObjects.Sprite,
+    location: Math.Vector2,
     moveAI: MoveAI,
     canSee: boolean
   ) {
-    super(scene, sprite, "NPC");
+    super(
+      scene,
+      scene.add.sprite(location.x, location.y, Assets.NPC, 0),
+      "NPC"
+    );
 
     this.moveAI = moveAI;
+
+    this.sprite.setFrame(0);
   }
 
   public update(): void {

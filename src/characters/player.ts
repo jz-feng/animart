@@ -49,14 +49,18 @@ export class Player extends Movable {
     }
 
     let anim_str = "player_idle_";
-    if (direction.y === -1) {
-      anim_str += "back_right";
-    } else if (direction.y === 1) {
+    if (direction.equals(Math.Vector2.RIGHT)) {
+      anim_str += "front_right";
+    } else if (direction.equals(Math.Vector2.LEFT)) {
       anim_str += "front_left";
     } else if (direction.x === 1 && direction.y === 1) {
       anim_str += "front_right";
     } else if (direction.x === -1 && direction.y === -1) {
       anim_str += "back_left";
+    } else if (direction.y === 1) {
+      anim_str += "front_left";
+    } else if (direction.y === -1) {
+      anim_str += "back_right";
     }
 
     if (anim_str !== "player_idle_") {
