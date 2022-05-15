@@ -1,13 +1,18 @@
-import { GameObjects, Geom, Math, Physics } from "phaser";
+import { Events, GameObjects, Geom, Math, Physics } from "phaser";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
+import { GroceryList } from "./grocery_list";
 
 export enum InteractableType {
   Milk,
-  Toy,
+  Radish,
+  CatFood,
+  Yarn,
+  Basket,
+  Checkout,
 }
 
-export class Interactable {
+export class Interactable extends Events.EventEmitter {
   private scene: GameScene;
   private location: Math.Vector2;
   type: InteractableType;
@@ -15,21 +20,25 @@ export class Interactable {
 
   constructor(
     scene: GameScene,
+    type: InteractableType,
     location: Math.Vector2,
-    type: InteractableType
+    size: Math.Vector2 = new Math.Vector2(Consts.TILE_SIZE, Consts.TILE_SIZE),
+    offset: Math.Vector2 = Math.Vector2.ZERO
   ) {
+    super();
+
     this.scene = scene;
     this.location = location;
     this.type = type;
 
     this.highlight = scene.add
       .rectangle(
-        location.x,
-        location.y,
-        Consts.TILE_SIZE,
-        Consts.TILE_SIZE,
-        0xffffff,
-        0.3
+        location.x + offset.x,
+        location.y + offset.y,
+        size.x,
+        size.y,
+        0xaad7ef,
+        0.4
       )
       .setOrigin(0, 0);
 
@@ -37,16 +46,28 @@ export class Interactable {
 
     // Bigger bounding box
     (this.highlight.body as Physics.Arcade.Body).setSize(
-      Consts.TILE_SIZE + 16,
-      Consts.TILE_SIZE + 16,
+      size.x + 16,
+      size.y + 16,
       true
     );
   }
 
   public interact(): boolean {
     const body = this.highlight.body as Physics.Arcade.Body;
-    if (body.embedded) {
-      this.highlight.setAlpha(0);
+
+    if (!body.enable) {
+      return false;
+    }
+
+    const list = GroceryList.get();
+
+    if (body.embedded && this.type === list.getNextItem()) {
+      body.setEnable(false);
+      this.highlight.setVisible(false);
+
+      list.completeItem();
+      this.emit("list_updated");
+
       return true;
     }
     return false;
