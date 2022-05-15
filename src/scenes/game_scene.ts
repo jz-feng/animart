@@ -69,10 +69,12 @@ export class GameScene extends Phaser.Scene {
     this.setUpInteractables();
     this.setUpAnimations();
     this.setUpEvents();
- 
+
     let bgm = this.game.sound.get("bgm");
     if (!bgm.isPlaying) {
-      bgm.play();
+      bgm.play(null, {
+        volume: 0.8,
+      });
     }
   }
 
@@ -91,9 +93,17 @@ export class GameScene extends Phaser.Scene {
     this.npcs.push(
       new NPC(this, Utils.tilesToPixels(3, 3), new MoveAI(this, 128), true)
     );
-
     this.npcs.push(
-      new NPC(this, Utils.tilesToPixels(5, 3), new MoveAI(this, 128), true)
+      new NPC(this, Utils.tilesToPixels(8, 6), new MoveAI(this, 128), true)
+    );
+    this.npcs.push(
+      new NPC(this, Utils.tilesToPixels(15, 6), new MoveAI(this, 128), true)
+    );
+    this.npcs.push(
+      new NPC(this, Utils.tilesToPixels(2, 11), new MoveAI(this, 128), true)
+    );
+    this.npcs.push(
+      new NPC(this, Utils.tilesToPixels(13, 12), new MoveAI(this, 128), true)
     );
 
     this.npcs.forEach((npc) =>
@@ -129,7 +139,7 @@ export class GameScene extends Phaser.Scene {
       .rectangle(
         16,
         Consts.TILE_SIZE * 4,
-        Consts.TILE_SIZE * 3,
+        Consts.TILE_SIZE * 3 + 16,
         Consts.TILE_SIZE * 4 - 16,
         0xffffff
       )
