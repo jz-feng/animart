@@ -24,8 +24,6 @@ export class NPC extends Movable {
 
     this.moveAI = moveAI;
 
-    this.sprite.setFrame(0);
-
     this.alert = scene.add
       .text(0, 0, "!", {
         color: "#ff8888",
@@ -35,7 +33,8 @@ export class NPC extends Movable {
         // strokeThickness: 5,
       })
       .setOrigin(0, 0)
-      .setVisible(false);
+      .setVisible(false)
+      .setDepth(10);
 
     // scene.add.tween({
     //   targets: this.alert,
