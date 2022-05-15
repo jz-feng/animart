@@ -4,4 +4,6 @@ export namespace Assets {
     export const TILEMAP_JSON = "tilemap";
     export const TILESET_NAME = "tiles";
   }
+
+  export const PLAYER = "player";
 }

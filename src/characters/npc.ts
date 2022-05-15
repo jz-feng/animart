@@ -10,7 +10,7 @@ export class NPC extends Movable {
 
   constructor(
     scene: GameScene,
-    sprite: GameObjects.Rectangle,
+    sprite: GameObjects.Sprite,
     moveAI: MoveAI,
     canSee: boolean
   ) {
@@ -49,13 +49,13 @@ export class NPC extends Movable {
     super.triggerConvo();
 
     this.hasInteracted = true;
-    this.sprite.setFillStyle(0xff0000);
+    this.sprite.setTintFill(0xff0000);
   }
 
   public endConvo(): void {
     super.endConvo();
 
-    this.sprite.setFillStyle(0x0000ff);
+    this.sprite.setTintFill(0x0000ff);
   }
 
   protected getMovement(): Phaser.Math.Vector2 {

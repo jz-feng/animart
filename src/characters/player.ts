@@ -1,4 +1,5 @@
 import { Math } from "phaser";
+import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { Movable } from "./movable";
 
@@ -10,12 +11,11 @@ export class Player extends Movable {
   constructor(scene: Phaser.Scene) {
     super(
       scene,
-      scene.add.rectangle(
+      scene.add.sprite(
         Consts.GAME_WIDTH / 2,
         Consts.GAME_HEIGHT / 2,
-        Consts.TILE_SIZE,
-        Consts.TILE_SIZE,
-        0xffffff
+        Assets.PLAYER,
+        0
       ),
       "player"
     );
@@ -31,8 +31,10 @@ export class Player extends Movable {
     let direction = new Math.Vector2();
     if (this.cursors.up.isDown) {
       direction.y = -1;
+      this.sprite.setFrame(1);
     } else if (this.cursors.down.isDown) {
       direction.y = 1;
+      this.sprite.setFrame(0);
     }
     if (this.cursors.left.isDown) {
       direction.x = -1;

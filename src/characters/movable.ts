@@ -7,16 +7,12 @@ export enum MoveState {
 }
 
 export abstract class Movable extends GameObjects.GameObject {
-  protected sprite: GameObjects.Rectangle;
+  protected sprite: GameObjects.Sprite;
   protected moveState: MoveState = MoveState.Free;
 
   private currVelocity = new Math.Vector2();
 
-  constructor(
-    scene: Phaser.Scene,
-    sprite: GameObjects.Rectangle,
-    type: string
-  ) {
+  constructor(scene: Phaser.Scene, sprite: GameObjects.Sprite, type: string) {
     super(scene, type);
 
     this.sprite = sprite;
@@ -29,7 +25,7 @@ export abstract class Movable extends GameObjects.GameObject {
     this.move();
   }
 
-  public getSprite(): GameObjects.Rectangle {
+  public getSprite(): GameObjects.Sprite {
     return this.sprite;
   }
 

@@ -61,13 +61,7 @@ export class GameScene extends Phaser.Scene {
     this.npcs.push(
       new NPC(
         this,
-        this.add.rectangle(
-          256,
-          256,
-          Consts.TILE_SIZE,
-          Consts.TILE_SIZE,
-          0x000000
-        ),
+        this.add.sprite(256, 256, Assets.PLAYER),
         new MoveAI(this, 128),
         true
       )
@@ -76,13 +70,7 @@ export class GameScene extends Phaser.Scene {
     this.npcs.push(
       new NPC(
         this,
-        this.add.rectangle(
-          512,
-          200,
-          Consts.TILE_SIZE,
-          Consts.TILE_SIZE,
-          0x000000
-        ),
+        this.add.sprite(512, 200, Assets.PLAYER),
         new MoveAI(this, 128),
         true
       )
