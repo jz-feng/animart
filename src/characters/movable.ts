@@ -4,7 +4,7 @@ import { Consts } from "../consts";
 export abstract class Movable extends GameObjects.GameObject {
   protected sprite: GameObjects.Rectangle;
 
-  private velocity = new Math.Vector2();
+  private currVelocity = new Math.Vector2();
 
   constructor(
     scene: Phaser.Scene,
@@ -15,6 +15,8 @@ export abstract class Movable extends GameObjects.GameObject {
 
     this.sprite = sprite;
     this.sprite.setOrigin(0, 0);
+
+    scene.physics.add.existing(this.sprite, false);
   }
 
   public update(): void {
@@ -26,14 +28,10 @@ export abstract class Movable extends GameObjects.GameObject {
   }
 
   protected move(): void {
-    if (
-      this.sprite.x % Consts.TILE_SIZE === 0 &&
-      this.sprite.y % Consts.TILE_SIZE === 0
-    ) {
-      this.velocity = this.getMovement();
+    this.currVelocity = this.getMovement();
+    if (this.sprite.body instanceof Phaser.Physics.Arcade.Body) {
+      this.sprite.body.setVelocity(this.currVelocity.x, this.currVelocity.y);
     }
-    this.sprite.x += this.velocity.x;
-    this.sprite.y += this.velocity.y;
   }
 
   protected abstract getMovement(): Phaser.Math.Vector2;

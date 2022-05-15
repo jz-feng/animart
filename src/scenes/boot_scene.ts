@@ -1,5 +1,6 @@
 import WebFontFile from "../web_font_file";
 import { Consts } from "../consts";
+import { Assets } from "../assets";
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -23,7 +24,11 @@ export class BootScene extends Phaser.Scene {
     // });
 
     // Tilemap
-    this.load.tilemapTiledJSON("tilemap", "assets/maps/tilemap.json");
+    this.load.image(Assets.Tilemap.TILESET_IMG, "assets/maps/tileset.png");
+    this.load.tilemapTiledJSON(
+      Assets.Tilemap.TILEMAP_JSON,
+      "assets/maps/tilemap.json"
+    );
 
     // sound
     // this.load.audio("baz", "assets/sfx/baz.wav");
