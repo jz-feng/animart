@@ -29,7 +29,7 @@ export class BootScene extends Phaser.Scene {
     });
 
     // Tilemap
-    this.load.image(Assets.Tilemap.TILESET_IMG, "assets/maps/tileset.png");
+    this.load.image(Assets.Tilemap.TILESET_IMG, "assets/objects/objects.png");
     this.load.tilemapTiledJSON(
       Assets.Tilemap.TILEMAP_JSON,
       "assets/maps/tilemap.json"

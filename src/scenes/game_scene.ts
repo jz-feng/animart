@@ -27,7 +27,7 @@ export class GameScene extends Phaser.Scene {
   preload(): void {}
 
   create(): void {
-    this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
+    this.cameras.main.setBackgroundColor("#ffffff");
 
     let tilemap = this.add.tilemap(
       Assets.Tilemap.TILEMAP_JSON,
@@ -41,21 +41,18 @@ export class GameScene extends Phaser.Scene {
       Assets.Tilemap.TILESET_IMG
     );
 
-    let floor_layer = tilemap.createLayer("Floor", Assets.Tilemap.TILESET_NAME);
-    this.collisionLayer = tilemap.createLayer(
-      "Collision",
-      Assets.Tilemap.TILESET_NAME
-    );
-    let in_front_layer = tilemap.createLayer(
-      "InFront",
-      Assets.Tilemap.TILESET_NAME
-    );
-    in_front_layer.depth = 1;
+    tilemap.createLayer("Floor", Assets.Tilemap.TILESET_NAME).setDepth(-10);
+    this.collisionLayer = tilemap
+      .createLayer("Collision", Assets.Tilemap.TILESET_NAME)
+      .setDepth(-2);
+    tilemap.createLayer("Behind", Assets.Tilemap.TILESET_NAME).setDepth(-1);
+    tilemap.createLayer("InFront", Assets.Tilemap.TILESET_NAME).setDepth(1);
+    tilemap.createLayer("InFront2", Assets.Tilemap.TILESET_NAME).setDepth(2);
 
-    // Set collision for all tiles on collision layer. NOTE: only include non-empty tiles
-    this.collisionLayer.setCollisionBetween(0, 5, true);
+    // Set collision for all tiles on collision layer. id=60 is magic non-colliding tile
+    this.collisionLayer.setCollisionByExclusion([60], true);
 
-    this.player = new Player(this, Utils.tilesToPixels(14, 19));
+    this.player = new Player(this, Utils.tilesToPixels(14.5, 14));
 
     this.camera = this.cameras.main;
     this.camera.startFollow(this.player.getSprite());
@@ -112,7 +109,7 @@ export class GameScene extends Phaser.Scene {
       .setOrigin(0, 0);
     this.energyBar.setScrollFactor(0);
     ui_layer.add(this.energyBar);
-    ui_layer.setDepth(2);
+    ui_layer.setDepth(10);
     // ui_layer.getChildren().forEach(c => c.set)
   }
 
