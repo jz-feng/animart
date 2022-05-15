@@ -34,7 +34,14 @@ export class GroceryList {
     return this.list.length === 0;
   }
 
-  public getItemNames(): string[] {
-    return [];
+  public getItemStrings(): Map<InteractableType, string> {
+    return new Map([
+      [InteractableType.Basket, "grab a basket"],
+      [InteractableType.Milk, "get some milk"],
+      [InteractableType.CatFood, "stock up on cat food"],
+      [InteractableType.Radish, "need more radishes"],
+      [InteractableType.Yarn, "ball of yarn"],
+      [InteractableType.Checkout, "go to checkout"],
+    ]);
   }
 }

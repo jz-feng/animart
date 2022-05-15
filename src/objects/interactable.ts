@@ -66,9 +66,7 @@ export class Interactable extends Events.EventEmitter {
       this.highlight.setVisible(false);
 
       list.completeItem();
-      if (list.isFinished()) {
-        this.emit("list_complete");
-      }
+      this.emit("list_updated");
 
       return true;
     }
