@@ -13,7 +13,7 @@ export class BootScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(Consts.Colors.BACKGROUND);
 
     // font
-    // this.load.addFile(new WebFontFile(this.load, Consts.FONT));
+    this.load.addFile(new WebFontFile(this.load, Consts.FONT));
 
     // images
     // this.load.image("foo", "assets/foo.png");
