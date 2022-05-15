@@ -108,10 +108,11 @@ export class GameScene extends Phaser.Scene {
     let ui_layer = this.add.group();
 
     this.energyBar = this.add
-      .rectangle(Consts.TILE_SIZE * 11, 32, Consts.TILE_SIZE * 4, 32, 0xffffff)
+      .rectangle(Consts.TILE_SIZE * 8, 32, Consts.TILE_SIZE * 3.5, 32, 0xffffff)
       .setOrigin(0, 0);
     this.energyBar.setScrollFactor(0);
     ui_layer.add(this.energyBar);
+    ui_layer.setDepth(2);
     // ui_layer.getChildren().forEach(c => c.set)
   }
 
