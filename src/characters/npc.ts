@@ -1,4 +1,4 @@
-import { GameObjects, Math, Sound } from "phaser";
+import { GameObjects, Math, Sound, Time } from "phaser";
 import { Assets } from "../assets";
 import { Consts } from "../consts";
 import { GameScene } from "../scenes/game_scene";
@@ -9,6 +9,7 @@ export class NPC extends Movable {
   private moveAI: MoveAI;
   private hasInteracted: boolean = false;
   private alert: GameObjects.Text;
+  private cooldown: Time.TimerEvent;
 
   // sound
   private spottedSound: Sound.BaseSound;
@@ -47,6 +48,10 @@ export class NPC extends Movable {
     //   repeat: -1,
     // });
 
+    this.cooldown = scene.time.addEvent({
+      paused: true,
+    });
+
     // sound
     this.spottedSound = scene.sound.add("spotted");
   }
@@ -70,7 +75,8 @@ export class NPC extends Movable {
       scene.getPlayer().getSprite().body.position
     );
     if (
-      !this.hasInteracted &&
+      // !this.hasInteracted &&
+      (this.cooldown.paused || this.cooldown.getRemaining() === 0) &&
       this.moveState === MoveState.Free &&
       scene.getPlayer().getState() === MoveState.Free &&
       dist <= Consts.TILE_SIZE * 2
@@ -93,8 +99,9 @@ export class NPC extends Movable {
   public endConvo(): void {
     super.endConvo();
 
+    this.cooldown = this.scene.time.addEvent({ delay: 5000 });
+
     this.alert.setVisible(false);
-    this.sprite.setTintFill(0x0000ff);
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
@@ -119,7 +126,7 @@ export class NPC extends Movable {
       return player_pos
         .subtract(this.sprite.body.position)
         .normalize()
-        .scale(256);
+        .scale(200);
     }
   }
 }
