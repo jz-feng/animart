@@ -61,6 +61,16 @@ export class BootScene extends Phaser.Scene {
     this.load.audio("male_3", "assets/sfx/voices/VoiceMaleHigh3.wav");
     this.load.audio("male_4", "assets/sfx/voices/VoiceMaleHigh4.wav");
     this.load.audio("male_5", "assets/sfx/voices/VoiceMaleHigh5.wav");
+    this.load.audio("female_low_1", "assets/sfx/voices/VoiceFemaleLow1.wav");
+    this.load.audio("female_low_2", "assets/sfx/voices/VoiceFemaleLow2.wav");
+    this.load.audio("female_low_3", "assets/sfx/voices/VoiceFemaleLow3.wav");
+    this.load.audio("female_low_4", "assets/sfx/voices/VoiceFemaleLow4.wav");
+    this.load.audio("female_low_5", "assets/sfx/voices/VoiceFemaleLow5.wav");
+    this.load.audio("male_low_1", "assets/sfx/voices/VoiceMaleLow1.wav");
+    this.load.audio("male_low_2", "assets/sfx/voices/VoiceMaleLow2.wav");
+    this.load.audio("male_low_3", "assets/sfx/voices/VoiceMaleLow3.wav");
+    this.load.audio("male_low_4", "assets/sfx/voices/VoiceMaleLow4.wav");
+    this.load.audio("male_low_5", "assets/sfx/voices/VoiceMaleLow4.wav"); // dupe
   }
 
   create(): void {

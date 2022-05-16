@@ -135,6 +135,26 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(2, 11),
         new MoveAI(this, 128),
         Assets.Text.T2,
+        "male_low",
+        true
+      )
+    );
+    this.npcs.push(
+      new NPC(
+        this,
+        Utils.tilesToPixels(11, 5),
+        new MoveAI(this, 128),
+        Assets.Text.T4,
+        "female_low",
+        true
+      )
+    );
+    this.npcs.push(
+      new NPC(
+        this,
+        Utils.tilesToPixels(6, 8),
+        new MoveAI(this, 128),
+        Assets.Text.T5,
         "male",
         true
       )
@@ -237,11 +257,6 @@ export class GameScene extends Phaser.Scene {
         this,
         InteractableType.Basket,
         Utils.tilesToPixels(16, 14)
-      ),
-      new Interactable(
-        this,
-        InteractableType.Basket,
-        Utils.tilesToPixels(17, 14)
       ),
       new Interactable(
         this,
