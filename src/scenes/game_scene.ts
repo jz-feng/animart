@@ -46,13 +46,21 @@ export class GameScene extends Phaser.Scene {
       Assets.Tilemap.TILESET_IMG
     );
 
-    tilemap.createLayer("Floor", Assets.Tilemap.TILESET_NAME).setDepth(-10);
+    tilemap
+      .createLayer("Floor", Assets.Tilemap.TILESET_NAME)
+      .setDepth(Consts.Layers.Floor);
     this.collisionLayer = tilemap
       .createLayer("Collision", Assets.Tilemap.TILESET_NAME)
-      .setDepth(-2);
-    tilemap.createLayer("Behind", Assets.Tilemap.TILESET_NAME).setDepth(-1);
-    tilemap.createLayer("InFront", Assets.Tilemap.TILESET_NAME).setDepth(1);
-    tilemap.createLayer("InFront2", Assets.Tilemap.TILESET_NAME).setDepth(2);
+      .setDepth(Consts.Layers.Collision);
+    tilemap
+      .createLayer("Behind", Assets.Tilemap.TILESET_NAME)
+      .setDepth(Consts.Layers.Behind);
+    tilemap
+      .createLayer("InFront", Assets.Tilemap.TILESET_NAME)
+      .setDepth(Consts.Layers.InFront);
+    tilemap
+      .createLayer("InFront2", Assets.Tilemap.TILESET_NAME)
+      .setDepth(Consts.Layers.InFront);
 
     // Set collision for all tiles on collision layer. id=60 is magic non-colliding tile
     this.collisionLayer.setCollisionByExclusion([60], true);
@@ -174,7 +182,7 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
     ui_layer.add(this.energyBar);
-    ui_layer.setDepth(10);
+    ui_layer.setDepth(Consts.Layers.UI);
 
     const sheet = this.add
       .rectangle(
@@ -280,7 +288,9 @@ export class GameScene extends Phaser.Scene {
       })
     );
 
-    this.add.group(this.interactables.map((i) => i.highlight)).setDepth(4);
+    this.add
+      .group(this.interactables.map((i) => i.highlight))
+      .setDepth(Consts.Layers.Overlay);
   }
 
   private checkInteract(): void {

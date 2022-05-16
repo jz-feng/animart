@@ -39,9 +39,9 @@ export class GroceryList {
       [InteractableType.Basket, "grab a basket"],
       [InteractableType.Milk, "get some milk"],
       [InteractableType.CatFood, "stock up on cat food"],
-      [InteractableType.Radish, "need more radishes"],
+      [InteractableType.Radish, "more radishes"],
       [InteractableType.Yarn, "ball of yarn"],
-      [InteractableType.Checkout, "go to checkout"],
+      [InteractableType.Checkout, "check out"],
     ]);
   }
 }

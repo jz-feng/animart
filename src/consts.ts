@@ -7,6 +7,18 @@ export namespace Consts {
     export const BACKGROUND = "#ece9c7";
   }
 
+  export enum Layers {
+    UI = 10,
+    Dialog = 9,
+    Overlay = 3,
+    InFront2 = 2,
+    InFront = 1,
+    Player = 0,
+    Behind = -1,
+    Collision = -2,
+    Floor = -10,
+  }
+
   export const TILE_SIZE = 64;
   export const MAP_WIDTH = 20;
   export const MAP_HEIGHT = 16;

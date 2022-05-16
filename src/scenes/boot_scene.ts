@@ -32,6 +32,11 @@ export class BootScene extends Phaser.Scene {
       }
     );
 
+    this.load.spritesheet("objects_sprite", "assets/objects/objects.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+
     // Tilemap
     this.load.image(Assets.Tilemap.TILESET_IMG, "assets/objects/objects.png");
     this.load.tilemapTiledJSON(

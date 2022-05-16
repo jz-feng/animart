@@ -9,7 +9,7 @@ import { MoveAI } from "./move_ai";
 export class NPC extends Movable {
   private moveAI: MoveAI;
   private hasInteracted: boolean = false;
-  private alert: GameObjects.Text;
+  private alert: GameObjects.Sprite;
   private cooldown: Time.TimerEvent;
 
   private dialogBox: GameObjects.Rectangle;
@@ -44,16 +44,10 @@ export class NPC extends Movable {
     this.moveAI = moveAI;
 
     this.alert = scene.add
-      .text(0, 0, "!", {
-        color: "#ff8888",
-        fontFamily: Consts.FONT,
-        fontSize: "48px",
-        // stroke: "#444444",
-        // strokeThickness: 5,
-      })
+      .sprite(0, 0, "objects_sprite", 53)
       .setOrigin(0, 0)
       .setVisible(false)
-      .setDepth(10);
+      .setDepth(Consts.Layers.Overlay);
 
     // scene.add.tween({
     //   targets: this.alert,
@@ -78,7 +72,7 @@ export class NPC extends Movable {
       .setOrigin(0, 0)
       .setStrokeStyle(2, 0x888888)
       .setVisible(false)
-      .setDepth(3);
+      .setDepth(Consts.Layers.Dialog);
 
     this.dialogText = scene.add
       .text(0, 0, "", {
@@ -93,7 +87,7 @@ export class NPC extends Movable {
       })
       .setOrigin(0, 0)
       .setVisible(false)
-      .setDepth(3);
+      .setDepth(Consts.Layers.Dialog);
 
     this.dialogSentences = dialogText;
 
@@ -106,7 +100,7 @@ export class NPC extends Movable {
     // Dumb way to follow the sprite
     this.alert.setPosition(
       this.sprite.body.position.x - 32,
-      this.sprite.body.position.y - 64
+      this.sprite.body.position.y - 32
     );
 
     this.checkCanSeePlayer();
