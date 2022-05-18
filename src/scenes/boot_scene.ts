@@ -51,6 +51,7 @@ export class BootScene extends Phaser.Scene {
     this.load.audio("gameStartMeow", "assets/sfx/meow.wav");
     this.load.audio("spotted", "assets/sfx/spotted.wav");
     this.load.audio("success", "assets/sfx/success.wav");
+    this.load.audio("cashReg", "assets/sfx/CashRegister.wav");
     this.load.audio("female_1", "assets/sfx/voices/VoiceFemaleHigh1.wav");
     this.load.audio("female_2", "assets/sfx/voices/VoiceFemaleHigh2.wav");
     this.load.audio("female_3", "assets/sfx/voices/VoiceFemaleHigh3.wav");

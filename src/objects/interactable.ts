@@ -19,6 +19,7 @@ export class Interactable extends Events.EventEmitter {
   highlight: GameObjects.Rectangle;
 
   private successSound: Sound.BaseSound;
+  private cashRegSound: Sound.BaseSound;
 
   constructor(
     scene: GameScene,
@@ -54,6 +55,7 @@ export class Interactable extends Events.EventEmitter {
     );
 
     this.successSound = scene.sound.add("success");
+    this.cashRegSound = scene.sound.add("cashReg");
   }
 
   public interact(): boolean {
@@ -68,9 +70,13 @@ export class Interactable extends Events.EventEmitter {
     if (body.embedded && this.type === list.getNextItem()) {
       body.setEnable(false);
       this.highlight.setVisible(false);
-
+      if( this.type == InteractableType.Checkout){
+        this.cashRegSound.play();	
+      } else {
+        this.successSound.play();
+      } 
       list.completeItem();
-      this.successSound.play();
+     
       this.emit("list_updated");
 
       return true;
