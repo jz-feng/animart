@@ -5,6 +5,7 @@ export namespace Consts {
 
   export namespace Colors {
     export const BACKGROUND = "#ece9c7";
+    export const INTERACTABLE = 0x3380ff;
   }
 
   export enum Layers {
@@ -21,9 +22,9 @@ export namespace Consts {
     Floor = -10,
   }
 
-  export const TILE_SIZE = 64;
+  export const TILE = 64;
   export const MAP_WIDTH = 20;
   export const MAP_HEIGHT = 16;
-  export const GAME_WIDTH = TILE_SIZE * 12;
-  export const GAME_HEIGHT = TILE_SIZE * 8;
+  export const GAME_WIDTH = TILE * 12;
+  export const GAME_HEIGHT = TILE * 8;
 }

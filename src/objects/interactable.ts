@@ -16,7 +16,7 @@ export class Interactable extends Events.EventEmitter {
   private scene: GameScene;
   private location: Math.Vector2;
   type: InteractableType;
-  highlight: GameObjects.Rectangle;
+  sprite: GameObjects.Rectangle;
 
   private successSound: Sound.BaseSound;
   private cashRegSound: Sound.BaseSound;
@@ -25,7 +25,7 @@ export class Interactable extends Events.EventEmitter {
     scene: GameScene,
     type: InteractableType,
     location: Math.Vector2,
-    size: Math.Vector2 = new Math.Vector2(Consts.TILE_SIZE, Consts.TILE_SIZE),
+    size: Math.Vector2 = new Math.Vector2(Consts.TILE, Consts.TILE),
     offset: Math.Vector2 = Math.Vector2.ZERO
   ) {
     super();
@@ -34,21 +34,21 @@ export class Interactable extends Events.EventEmitter {
     this.location = location;
     this.type = type;
 
-    this.highlight = scene.add
+    this.sprite = scene.add
       .rectangle(
         location.x + offset.x,
         location.y + offset.y,
         size.x,
         size.y,
-        0xaad7ef,
-        0.4
+        Consts.Colors.INTERACTABLE,
+        0.1
       )
       .setOrigin(0, 0);
 
-    scene.physics.add.existing(this.highlight);
+    scene.physics.add.existing(this.sprite);
 
     // Bigger bounding box
-    (this.highlight.body as Physics.Arcade.Body).setSize(
+    (this.sprite.body as Physics.Arcade.Body).setSize(
       size.x + 16,
       size.y + 16,
       true
@@ -59,7 +59,7 @@ export class Interactable extends Events.EventEmitter {
   }
 
   public interact(): boolean {
-    const body = this.highlight.body as Physics.Arcade.Body;
+    const body = this.sprite.body as Physics.Arcade.Body;
 
     if (!body.enable) {
       return false;
@@ -69,14 +69,14 @@ export class Interactable extends Events.EventEmitter {
 
     if (body.embedded && this.type === list.getNextItem()) {
       body.setEnable(false);
-      this.highlight.setVisible(false);
-      if( this.type == InteractableType.Checkout){
-        this.cashRegSound.play();	
+      this.sprite.setVisible(false);
+      if (this.type == InteractableType.Checkout) {
+        this.cashRegSound.play();
       } else {
         this.successSound.play();
-      } 
+      }
       list.completeItem();
-     
+
       this.emit("list_updated");
 
       return true;

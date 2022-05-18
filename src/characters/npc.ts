@@ -11,6 +11,7 @@ export class NPC extends Movable {
   private hasInteracted: boolean = false;
   private alert: GameObjects.Sprite;
   private cooldown: Time.TimerEvent;
+  private cooldownDuration: number;
 
   private dialogBox: GameObjects.Rectangle;
   private dialogText: GameObjects.Text;
@@ -30,7 +31,8 @@ export class NPC extends Movable {
     location: Math.Vector2,
     moveAI: MoveAI,
     dialogText: string[],
-    voice: string
+    voice: string,
+    cooldown: number = 5
   ) {
     super(scene, scene.add.sprite(0, 0, Assets.NPC, 0), location);
 
@@ -47,6 +49,7 @@ export class NPC extends Movable {
     this.cooldown = scene.time.addEvent({
       paused: true,
     });
+    this.cooldownDuration = cooldown;
 
     // sound
     this.spottedSound = scene.sound.add("spotted");
@@ -55,7 +58,7 @@ export class NPC extends Movable {
     }
 
     this.dialogBox = scene.add
-      .rectangle(0, 0, Consts.TILE_SIZE * 7, Consts.TILE_SIZE * 3, 0xffffff)
+      .rectangle(0, 0, Consts.TILE * 7, Consts.TILE * 3, 0xffffff)
       .setOrigin(0, 0)
       .setStrokeStyle(2, 0x888888)
       .setVisible(false)
@@ -68,7 +71,7 @@ export class NPC extends Movable {
         fontSize: "24px",
         align: "left",
         wordWrap: {
-          width: Consts.TILE_SIZE * 7 - 32,
+          width: Consts.TILE * 7 - 32,
           useAdvancedWrap: true,
         },
       })
@@ -102,7 +105,7 @@ export class NPC extends Movable {
       (this.cooldown.paused || this.cooldown.getRemaining() === 0) &&
       this.canMove() &&
       player.canMove() &&
-      dist <= Consts.TILE_SIZE * 2
+      dist <= Consts.TILE * 2
     ) {
       this.triggerConvo();
       player.triggerConvo();
@@ -145,7 +148,9 @@ export class NPC extends Movable {
   public endConvo(): void {
     this.moveState = MoveState.Free;
     this.gameScene.triggerEndConvo();
-    this.cooldown = this.scene.time.addEvent({ delay: 10000 });
+    this.cooldown = this.scene.time.addEvent({
+      delay: this.cooldownDuration * 1000,
+    });
     this.alert.setVisible(false);
     this.hideDialog();
   }
@@ -184,8 +189,7 @@ export class NPC extends Movable {
       this.gameScene.getPlayer().body.position as Math.Vector2
     ).clone();
     if (
-      Math.Distance.BetweenPoints(player_pos, this.body.position) <=
-      Consts.TILE_SIZE
+      Math.Distance.BetweenPoints(player_pos, this.body.position) <= Consts.TILE
     ) {
       this.moveState = MoveState.Talking;
       if (!this.dialogBox.visible) {
@@ -199,7 +203,7 @@ export class NPC extends Movable {
 
   private showDialog(): void {
     this.dialogBox
-      .setPosition(this.x - Consts.TILE_SIZE * 3, this.y - Consts.TILE_SIZE * 3)
+      .setPosition(this.x - Consts.TILE * 3, this.y - Consts.TILE * 3)
       .setVisible(true);
     this.dialogText
       .setPosition(this.dialogBox.x + 16, this.dialogBox.y + 16)

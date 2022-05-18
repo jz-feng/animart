@@ -36,8 +36,8 @@ export class GameScene extends Phaser.Scene {
 
     let tilemap = this.add.tilemap(
       Assets.Tilemap.TILEMAP_JSON,
-      Consts.TILE_SIZE,
-      Consts.TILE_SIZE,
+      Consts.TILE,
+      Consts.TILE,
       Consts.MAP_WIDTH,
       Consts.MAP_HEIGHT
     );
@@ -154,7 +154,8 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(13, 12),
         new MoveAI(this, 128),
         Assets.Text.T1,
-        "female"
+        "female",
+        20
       )
     );
 
@@ -184,7 +185,7 @@ export class GameScene extends Phaser.Scene {
     let ui_layer = this.add.layer();
 
     this.energyBar = this.add
-      .rectangle(Consts.TILE_SIZE * 8, 32, Consts.TILE_SIZE * 3.5, 32, 0xeebbcc)
+      .rectangle(Consts.TILE * 8, 32, Consts.TILE * 3.5, 32, 0xeebbcc)
       .setOrigin(0, 0)
       .setScrollFactor(0)
       .setVisible(false);
@@ -194,9 +195,9 @@ export class GameScene extends Phaser.Scene {
     const sheet = this.add
       .rectangle(
         16,
-        Consts.TILE_SIZE * 4,
-        Consts.TILE_SIZE * 3 + 16,
-        Consts.TILE_SIZE * 4 - 16,
+        Consts.TILE * 4,
+        Consts.TILE * 3 + 16,
+        Consts.TILE * 4 - 16,
         0xffffff
       )
       .setOrigin(0, 0)
@@ -243,41 +244,55 @@ export class GameScene extends Phaser.Scene {
       new Interactable(
         this,
         InteractableType.Basket,
-        Utils.tilesToPixels(16, 14)
+        Utils.tilesToPixels(16, 14),
+        new Math.Vector2(Consts.TILE * 2, Consts.TILE)
       ),
       new Interactable(
         this,
         InteractableType.Milk,
         Utils.tilesToPixels(9, 1),
-        new Math.Vector2(Consts.TILE_SIZE, Consts.TILE_SIZE * 2)
+        new Math.Vector2(Consts.TILE * 2, Consts.TILE * 2)
       ),
       new Interactable(
         this,
         InteractableType.Radish,
-        Utils.tilesToPixels(16, 9)
+        Utils.tilesToPixels(16, 9),
+        new Math.Vector2(Consts.TILE * 2, Consts.TILE)
       ),
       new Interactable(
         this,
         InteractableType.CatFood,
-        Utils.tilesToPixels(1, 5)
+        Utils.tilesToPixels(1, 4),
+        new Math.Vector2(Consts.TILE, Consts.TILE * 2)
+      ),
+      new Interactable(
+        this,
+        InteractableType.CatFood,
+        Utils.tilesToPixels(1, 6),
+        new Math.Vector2(Consts.TILE, Consts.TILE * 2)
       ),
       new Interactable(
         this,
         InteractableType.Yarn,
         Utils.tilesToPixels(7, 4),
-        new Math.Vector2(Consts.TILE_SIZE / 2, Consts.TILE_SIZE * 2)
+        new Math.Vector2(Consts.TILE / 2, Consts.TILE * 2)
       ),
       new Interactable(
         this,
         InteractableType.Checkout,
         Utils.tilesToPixels(4, 10),
-        new Math.Vector2(Consts.TILE_SIZE / 2, Consts.TILE_SIZE),
-        new Math.Vector2(Consts.TILE_SIZE / 2, 0)
+        new Math.Vector2(Consts.TILE, Consts.TILE * 3)
+      ),
+      new Interactable(
+        this,
+        InteractableType.Checkout,
+        Utils.tilesToPixels(7, 10),
+        new Math.Vector2(Consts.TILE, Consts.TILE * 3)
       )
     );
 
     this.physics.add.overlap(
-      this.interactables.map((i) => i.highlight),
+      this.interactables.map((i) => i.sprite),
       this.player
     );
 
@@ -291,7 +306,7 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.add
-      .group(this.interactables.map((i) => i.highlight))
+      .group(this.interactables.map((i) => i.sprite))
       .setDepth(Consts.Layers.Overlay);
   }
 
