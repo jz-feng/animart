@@ -27,7 +27,6 @@ export class GroceryList {
 
   public completeItem(): void {
     this.list.pop();
-    console.log(this.list);
   }
 
   public isFinished(): boolean {

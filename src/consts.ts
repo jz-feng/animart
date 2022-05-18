@@ -9,7 +9,7 @@ export namespace Consts {
 
   export enum Layers {
     UI = 10,
-    Dialog = 9,
+    Dialog = 11,
     Overlay = 3,
     InFront2 = 2,
     InFront = 1,

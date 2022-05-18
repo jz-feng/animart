@@ -30,32 +30,19 @@ export class NPC extends Movable {
     location: Math.Vector2,
     moveAI: MoveAI,
     dialogText: string[],
-    voice: string,
-    canSee: boolean
+    voice: string
   ) {
-    super(
-      scene,
-      scene.add.sprite(location.x, location.y, Assets.NPC, 0),
-      "NPC"
-    );
+    super(scene, scene.add.sprite(0, 0, Assets.NPC, 0), location);
 
     this.rnd = new Math.RandomDataGenerator();
 
     this.moveAI = moveAI;
 
     this.alert = scene.add
-      .sprite(0, 0, "objects_sprite", 53)
+      .sprite(-32, 0, "objects_sprite", 53)
       .setOrigin(0, 0)
       .setVisible(false)
       .setDepth(Consts.Layers.Overlay);
-
-    // scene.add.tween({
-    //   targets: this.alert,
-    //   y: 0,
-    //   ease: "Linear",
-    //   yoyo: true,
-    //   repeat: -1,
-    // });
 
     this.cooldown = scene.time.addEvent({
       paused: true,
@@ -89,6 +76,10 @@ export class NPC extends Movable {
       .setVisible(false)
       .setDepth(Consts.Layers.Dialog);
 
+    // Do not add dialog components to this container since they need to be
+    // on their own layer
+    this.add([this.alert]);
+
     this.dialogSentences = dialogText;
 
     this.sprite.play("npc_idle_front");
@@ -97,30 +88,23 @@ export class NPC extends Movable {
   public update(): void {
     super.update();
 
-    // Dumb way to follow the sprite
-    this.alert.setPosition(
-      this.sprite.body.position.x - 32,
-      this.sprite.body.position.y - 32
-    );
-
     this.checkCanSeePlayer();
   }
 
   protected checkCanSeePlayer(): boolean {
-    const scene = this.scene as GameScene;
+    const player = this.gameScene.getPlayer();
     const dist = Phaser.Math.Distance.BetweenPoints(
-      this.sprite.body.position,
-      scene.getPlayer().getSprite().body.position
+      this.body.position,
+      player.body.position
     );
     if (
-      // !this.hasInteracted &&
       (this.cooldown.paused || this.cooldown.getRemaining() === 0) &&
-      this.moveState === MoveState.Free &&
-      scene.getPlayer().getState() === MoveState.Free &&
+      this.canMove() &&
+      player.canMove() &&
       dist <= Consts.TILE_SIZE * 2
     ) {
       this.triggerConvo();
-      scene.getPlayer().triggerConvo();
+      player.triggerConvo();
       return true;
     } else {
       return false;
@@ -133,6 +117,7 @@ export class NPC extends Movable {
     this.spottedSound.play();
     this.alert.setVisible(true);
 
+    // Always play the first voiceline at the start
     this.speechSounds.at(0).play();
   }
 
@@ -141,6 +126,7 @@ export class NPC extends Movable {
       this.currSetenceIndex++;
       this.updateDialogText();
 
+      // After the first line, play random lines
       this.rnd.pick(this.speechSounds.slice(1)).play();
     } else {
       this.endConvo();
@@ -156,18 +142,15 @@ export class NPC extends Movable {
   }
 
   public endConvo(): void {
-    super.endConvo();
-
-    (this.scene as GameScene).triggerEndConvo();
-
-    this.cooldown = this.scene.time.addEvent({ delay: 5000 });
-
+    this.moveState = MoveState.Free;
+    this.gameScene.triggerEndConvo();
+    this.cooldown = this.scene.time.addEvent({ delay: 10000 });
     this.alert.setVisible(false);
     this.hideDialog();
   }
 
   protected getMovement(): Phaser.Math.Vector2 {
-    let movement;
+    let movement: Math.Vector2;
     if (this.moveState === MoveState.Seeking) {
       movement = this.getMovementTowardPlayer();
     } else {
@@ -197,11 +180,10 @@ export class NPC extends Movable {
 
   protected getMovementTowardPlayer(): Math.Vector2 {
     let player_pos = (
-      (this.scene as GameScene).getPlayer().getSprite().body
-        .position as Math.Vector2
+      this.gameScene.getPlayer().body.position as Math.Vector2
     ).clone();
     if (
-      Math.Distance.BetweenPoints(player_pos, this.sprite.body.position) <=
+      Math.Distance.BetweenPoints(player_pos, this.body.position) <=
       Consts.TILE_SIZE
     ) {
       this.moveState = MoveState.Talking;
@@ -210,19 +192,13 @@ export class NPC extends Movable {
       }
       return Math.Vector2.ZERO;
     } else {
-      return player_pos
-        .subtract(this.sprite.body.position)
-        .normalize()
-        .scale(200);
+      return player_pos.subtract(this.body.position).normalize().scale(200);
     }
   }
 
   private showDialog(): void {
     this.dialogBox
-      .setPosition(
-        this.sprite.x - Consts.TILE_SIZE * 3,
-        this.sprite.y - Consts.TILE_SIZE * 3
-      )
+      .setPosition(this.x - Consts.TILE_SIZE * 3, this.y - Consts.TILE_SIZE * 3)
       .setVisible(true);
     this.dialogText
       .setPosition(this.dialogBox.x + 16, this.dialogBox.y + 16)

@@ -11,7 +11,7 @@ export namespace Assets {
   export namespace Text {
     export const T1 = [
       "Hello! ",
-      "Welcome to Animart where your satisfaction is our number one priority! ",
+      "Welcome to AniMart where your satisfaction is our number one priority! ",
       "We have a large sale on radishes today, would you like to see our flyer? ",
       "No? ",
       "Well that's okay too. ",
@@ -28,7 +28,7 @@ export namespace Assets {
     ];
 
     export const T3 = [
-      "Would you like to apply for our Animart credit card? ",
+      "Would you like to apply for our AniMart credit card? ",
       "It'll give you 10% off on all grocery store items. ",
       "It'll also give you points that you can use at the pharmacy. ",
       "Signing up for the card will only take about thirty minutes.",

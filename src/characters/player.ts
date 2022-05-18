@@ -1,6 +1,7 @@
 import { Math, Sound } from "phaser";
 import { Assets } from "../assets";
-import { Movable } from "./movable";
+import { GameScene } from "../scenes/game_scene";
+import { Movable, MoveState } from "./movable";
 
 export class Player extends Movable {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -12,37 +13,25 @@ export class Player extends Movable {
   public static MAX_ENERGY = 100;
   private energy = Player.MAX_ENERGY;
 
-  // sound
-  private energyLostSound: Sound.BaseSound;
-  private gameOverSound: Sound.BaseSound;
+  constructor(scene: GameScene, location: Math.Vector2) {
+    super(scene, scene.add.sprite(0, 0, Assets.PLAYER, 0), location);
 
-  constructor(scene: Phaser.Scene, location: Math.Vector2) {
-    super(
-      scene,
-      scene.add.sprite(location.x, location.y, Assets.PLAYER, 0),
-      "player"
-    );
-
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
-
-    // sound
-    this.energyLostSound = scene.sound.add("energyLost");
-    this.gameOverSound = scene.sound.add("gameOverMeow");
-  }
-
-  public update(): void {
-    super.update();
+    this.cursors = scene.input.keyboard.createCursorKeys();
   }
 
   public getEnergy(): number {
     return this.energy;
   }
 
+  public triggerConvo(): void {
+    this.moveState = MoveState.Talking;
+  }
+
   public endConvo(): void {
-    super.endConvo();
+    this.moveState = MoveState.Free;
 
     this.energy -= 10;
-    this.energyLostSound.play();
+    this.gameScene.sound.get("energyLost").play();
 
     if (this.energy <= 0) {
       // this.gameOverSound.play();

@@ -68,9 +68,9 @@ export class GameScene extends Phaser.Scene {
     this.player = new Player(this, Utils.tilesToPixels(14.5, 14));
 
     this.camera = this.cameras.main;
-    this.camera.startFollow(this.player.getSprite());
+    this.camera.startFollow(this.player);
 
-    this.physics.add.collider(this.player.getSprite(), this.collisionLayer);
+    this.physics.add.collider(this.player, this.collisionLayer);
 
     this.setUpNPCs();
     this.setUpInputs();
@@ -78,13 +78,7 @@ export class GameScene extends Phaser.Scene {
     this.setUpInteractables();
     this.setUpAnimations();
     this.setUpEvents();
-
-    let bgm = this.game.sound.get("bgm");
-    if (!bgm.isPlaying) {
-      bgm.play(null, {
-        volume: 0.8,
-      });
-    }
+    this.setUpSound();
   }
 
   update(): void {
@@ -105,8 +99,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(3, 3),
         new MoveAI(this, 128),
         Assets.Text.T5,
-        "female",
-        true
+        "female"
       )
     );
     this.npcs.push(
@@ -115,8 +108,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(8, 6),
         new MoveAI(this, 128),
         Assets.Text.T4,
-        "male",
-        true
+        "male"
       )
     );
     this.npcs.push(
@@ -125,8 +117,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(15, 6),
         new MoveAI(this, 128),
         Assets.Text.T3,
-        "female",
-        true
+        "female"
       )
     );
     this.npcs.push(
@@ -135,8 +126,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(2, 11),
         new MoveAI(this, 128),
         Assets.Text.T2,
-        "male_low",
-        true
+        "male_low"
       )
     );
     this.npcs.push(
@@ -145,8 +135,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(11, 5),
         new MoveAI(this, 128),
         Assets.Text.T4,
-        "female_low",
-        true
+        "female_low"
       )
     );
     this.npcs.push(
@@ -155,8 +144,7 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(6, 8),
         new MoveAI(this, 128),
         Assets.Text.T5,
-        "male",
-        true
+        "male"
       )
     );
     this.npcs.push(
@@ -166,13 +154,12 @@ export class GameScene extends Phaser.Scene {
         Utils.tilesToPixels(13, 12),
         new MoveAI(this, 128),
         Assets.Text.T1,
-        "female",
-        true
+        "female"
       )
     );
 
     this.npcs.forEach((npc) =>
-      this.physics.add.collider(npc.getSprite(), this.collisionLayer)
+      this.physics.add.collider(npc, this.collisionLayer)
     );
   }
 
@@ -291,7 +278,7 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.interactables.map((i) => i.highlight),
-      this.player.getSprite()
+      this.player
     );
 
     this.interactables.forEach((i) =>
@@ -425,15 +412,6 @@ export class GameScene extends Phaser.Scene {
       frameRate: 8,
       repeat: -1,
     });
-    // this.anims.create({
-    //   key: "npc_walk_front_right",
-    //   frames: this.anims.generateFrameNumbers(Assets.NPC, {
-    //     start: 20,
-    //     end: 23,
-    //   }),
-    //   frameRate: 8,
-    //   repeat: -1,
-    // });
     this.anims.create({
       key: "npc_walk_back",
       frames: this.anims.generateFrameNumbers(Assets.NPC, {
@@ -443,19 +421,22 @@ export class GameScene extends Phaser.Scene {
       frameRate: 8,
       repeat: -1,
     });
-    // this.anims.create({
-    //   key: "npc_walk_back_right",
-    //   frames: this.anims.generateFrameNumbers(Assets.NPC, {
-    //     start: 28,
-    //     end: 31,
-    //   }),
-    //   frameRate: 8,
-    //   repeat: -1,
-    // });
   }
 
   private setUpEvents(): void {
     this.player.on("game_over", () => this.triggerGameOver());
+  }
+
+  private setUpSound(): void {
+    let bgm = this.game.sound.get("bgm");
+    if (!bgm.isPlaying) {
+      bgm.play(null, {
+        volume: 0.8,
+      });
+    }
+
+    this.sound.add("energyLost");
+    this.sound.add("gameOverMeow");
   }
 
   private triggerGameOver(): void {
@@ -473,7 +454,7 @@ export class GameScene extends Phaser.Scene {
     //   targets: game_over,
     //   alpha: 0,
     // });
-    this.player.moveState = MoveState.Talking;
+    this.player.setMoveState(MoveState.Talking);
   }
 
   private triggerGameWin(): void {

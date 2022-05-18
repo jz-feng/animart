@@ -7,7 +7,7 @@ import { TitleScene } from "./scenes/title_scene";
 type GameConfig = Phaser.Types.Core.GameConfig;
 
 const config: GameConfig = {
-  title: "",
+  title: "AniMart",
   width: Consts.GAME_WIDTH,
   height: Consts.GAME_HEIGHT,
   type: Phaser.AUTO,
@@ -20,7 +20,7 @@ const config: GameConfig = {
   physics: {
     default: "arcade",
     arcade: {
-      debug: false,
+      debug: true,
     },
   },
   render: {
