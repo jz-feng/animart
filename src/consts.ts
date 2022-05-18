@@ -8,14 +8,16 @@ export namespace Consts {
   }
 
   export enum Layers {
-    UI = 10,
     Dialog = 11,
-    Overlay = 3,
-    InFront2 = 2,
-    InFront = 1,
+    UI = 10,
+    Overlay = 4,
+    InFront2 = 3,
+    InFront = 2, // Terrain in front of the player
+    NPCInFront = 1, // Used for when NPCs stand in front of the player
     Player = 0,
-    Behind = -1,
-    Collision = -2,
+    NPCBehind = -1, // Used for when NPCs stand behind the player
+    Behind = -2, // Terrain behind the player
+    Collision = -3,
     Floor = -10,
   }
 

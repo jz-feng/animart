@@ -88,6 +88,7 @@ export class NPC extends Movable {
   public update(): void {
     super.update();
 
+    this.checkRenderDepth();
     this.checkCanSeePlayer();
   }
 
@@ -210,5 +211,13 @@ export class NPC extends Movable {
     this.dialogBox.setVisible(false);
     this.dialogText.setVisible(false);
     this.currSetenceIndex = 1;
+  }
+
+  private checkRenderDepth(): void {
+    if (this.gameScene.getPlayer().y < this.y) {
+      this.setDepth(Consts.Layers.NPCInFront);
+    } else {
+      this.setDepth(Consts.Layers.NPCBehind);
+    }
   }
 }
