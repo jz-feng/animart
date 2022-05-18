@@ -1,4 +1,5 @@
 import { Consts } from "../consts";
+import { GameScene } from "./game_scene";
 
 export class TitleScene extends Phaser.Scene {
   private gameStartMeow: Phaser.Sound.BaseSound;
@@ -40,6 +41,10 @@ export class TitleScene extends Phaser.Scene {
   // Trigger main game scene
   startGame() {
     this.gameStartMeow.play();
+    if (!this.scene.get("GameScene")) {
+      // Re-create scene for re-navigation
+      this.scene.add("GameScene", GameScene);
+    }
     this.scene.start("GameScene");
   }
 }

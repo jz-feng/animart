@@ -10,11 +10,11 @@ export enum InteractableType {
   Yarn,
   Basket,
   Checkout,
+  // special usage
+  GoHome,
 }
 
 export class Interactable extends Events.EventEmitter {
-  private scene: GameScene;
-  private location: Math.Vector2;
   type: InteractableType;
   sprite: GameObjects.Rectangle;
 
@@ -30,8 +30,6 @@ export class Interactable extends Events.EventEmitter {
   ) {
     super();
 
-    this.scene = scene;
-    this.location = location;
     this.type = type;
 
     this.sprite = scene.add

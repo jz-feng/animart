@@ -10,8 +10,6 @@ import { GroceryList } from "../objects/grocery_list";
 import { MoveState } from "../characters/movable";
 
 export class GameScene extends Phaser.Scene {
-  private camera: Phaser.Cameras.Scene2D.Camera;
-
   // Objects
   private player: Player;
   private npcs: NPC[] = [];
@@ -67,10 +65,31 @@ export class GameScene extends Phaser.Scene {
 
     this.player = new Player(this, Utils.tilesToPixels(14.5, 14));
 
-    this.camera = this.cameras.main;
-    this.camera.startFollow(this.player);
-
     this.physics.add.collider(this.player, this.collisionLayer);
+
+    this.cameras.main.startFollow(this.player);
+
+    let exit = this.add
+      .rectangle(
+        Consts.TILE * 14,
+        Consts.TILE * 15.5,
+        Consts.TILE * 2,
+        Consts.TILE / 2
+      )
+      .setOrigin(0, 0)
+      .setVisible(false);
+    let exit_group = this.physics.add.staticGroup([exit]);
+
+    this.physics.add.collider(
+      this.player,
+      exit_group,
+      null,
+      () => !GroceryList.get().isComplete()
+    );
+
+    this.physics.add.overlap(this.player, exit_group, () => this.triggerExit());
+
+    GroceryList.reset();
 
     this.setUpNPCs();
     this.setUpInputs();
@@ -221,7 +240,6 @@ export class GameScene extends Phaser.Scene {
     const items = GroceryList.get().getItemStrings();
     let i = 0;
     for (let type of items.keys()) {
-      console.log(items.get(type));
       let item = this.add
         .text(
           sheet.x + 16,
@@ -298,8 +316,8 @@ export class GameScene extends Phaser.Scene {
 
     this.interactables.forEach((i) =>
       i.on("list_updated", () => {
-        this.groceryList.get(i.type).setColor("#bbbbbb");
-        if (GroceryList.get().isFinished()) {
+        this.groceryList.get(i.type).setColor(Consts.Colors.GRAYED_TEXT);
+        if (GroceryList.get().isComplete()) {
           // this.triggerGameWin();
         }
       })
@@ -472,22 +490,26 @@ export class GameScene extends Phaser.Scene {
     this.player.setMoveState(MoveState.Talking);
   }
 
-  private triggerGameWin(): void {
-    let complete = this.add
-      .text(
-        Consts.GAME_WIDTH / 2,
-        Consts.GAME_HEIGHT / 2,
-        "Shopping Complete",
-        {
-          color: "#fde9dd",
-          fontFamily: Consts.FONT,
-          fontSize: "64px",
-          stroke: "#888888",
-          strokeThickness: 2,
-        }
-      )
-      .setOrigin(0.5, 0.5)
-      .setScrollFactor(0);
-    console.log("list complete");
+  private triggerExit(): void {
+    if (
+      !GroceryList.get().isComplete() ||
+      this.player.getState() === MoveState.Talking
+    ) {
+      return;
+    }
+
+    this.player.setMoveState(MoveState.Talking);
+    this.groceryList
+      .get(InteractableType.GoHome)
+      .setColor(Consts.Colors.GRAYED_TEXT);
+
+    // Fade to white and return to title
+    this.cameras.main.fadeOut(2000, 255, 255, 255, (_, progress) => {
+      if (progress === 1) {
+        this.scene.stop("GameScene");
+        this.scene.remove("GameScene");
+        this.scene.start("TitleScene");
+      }
+    });
   }
 }

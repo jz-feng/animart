@@ -28,12 +28,12 @@ const config: GameConfig = {
   },
 };
 
-export class BoilerplateGame extends Phaser.Game {
+export class AniMartGame extends Phaser.Game {
   constructor(config: GameConfig) {
     super(config);
   }
 }
 
 window.onload = () => {
-  var game = new BoilerplateGame(config);
+  var game = new AniMartGame(config);
 };

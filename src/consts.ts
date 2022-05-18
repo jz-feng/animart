@@ -6,6 +6,7 @@ export namespace Consts {
   export namespace Colors {
     export const BACKGROUND = "#ece9c7";
     export const INTERACTABLE = 0x3380ff;
+    export const GRAYED_TEXT = "#bbbbbb";
   }
 
   export enum Layers {

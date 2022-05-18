@@ -21,6 +21,10 @@ export class GroceryList {
     return GroceryList.instance;
   }
 
+  public static reset(): void {
+    this.instance = null;
+  }
+
   public getNextItem(): InteractableType {
     return this.list.at(-1);
   }
@@ -29,7 +33,7 @@ export class GroceryList {
     this.list.pop();
   }
 
-  public isFinished(): boolean {
+  public isComplete(): boolean {
     return this.list.length === 0;
   }
 
@@ -41,6 +45,7 @@ export class GroceryList {
       [InteractableType.Radish, "more radishes"],
       [InteractableType.Yarn, "ball of yarn"],
       [InteractableType.Checkout, "check out"],
+      [InteractableType.GoHome, "go home :)"],
     ]);
   }
 }
