@@ -3,7 +3,7 @@ import { MoveAI } from "../characters/move_ai";
 import { NPC } from "../characters/npc";
 import { Player } from "../characters/player";
 import { Assets } from "../assets";
-import { GameObjects, Math, Sound, Tilemaps } from "phaser";
+import { GameObjects, Math, Tilemaps, Time } from "phaser";
 import { Interactable, InteractableType } from "../objects/interactable";
 import { Utils } from "../utils";
 import { GroceryList } from "../objects/grocery_list";
@@ -18,6 +18,8 @@ export class GameScene extends Phaser.Scene {
   // UI
   private energyBar: GameObjects.Rectangle;
   private groceryList: Map<InteractableType, GameObjects.Text> = new Map();
+  private timer: Time.TimerEvent;
+  private timerText: GameObjects.Text;
 
   public collisionLayer: Tilemaps.TilemapLayer;
 
@@ -103,6 +105,8 @@ export class GameScene extends Phaser.Scene {
   update(): void {
     this.player.update();
     this.npcs.forEach((npc) => npc.update());
+
+    this.updateTimer();
 
     // this.energyBar.setScale(this.player.getEnergy() / Player.MAX_ENERGY, 1);
   }
@@ -253,6 +257,18 @@ export class GameScene extends Phaser.Scene {
       ui_layer.add(item);
       i++;
     }
+
+    this.timerText = this.add
+      .text(Consts.GAME_WIDTH - 16, 16, "", {
+        color: Consts.Colors.GRAYED_TEXT,
+        fontFamily: Consts.FONT,
+        fontSize: "32px",
+      })
+      .setOrigin(1, 0)
+      .setScrollFactor(0);
+    ui_layer.add(this.timerText);
+
+    this.timer = this.time.addEvent({ delay: 10 * 60 * 1000 });
 
     ui_layer.sendToBack(sheet);
   }
@@ -503,6 +519,8 @@ export class GameScene extends Phaser.Scene {
       .get(InteractableType.GoHome)
       .setColor(Consts.Colors.GRAYED_TEXT);
 
+    this.timer.paused = true;
+
     // Fade to white and return to title
     this.cameras.main.fadeOut(2000, 255, 255, 255, (_, progress) => {
       if (progress === 1) {
@@ -511,5 +529,11 @@ export class GameScene extends Phaser.Scene {
         this.scene.start("TitleScene");
       }
     });
+  }
+
+  private updateTimer(): void {
+    let date = new Date(null);
+    date.setMilliseconds(this.timer.getElapsed());
+    this.timerText.setText(date.toISOString().substring(15, 21));
   }
 }
