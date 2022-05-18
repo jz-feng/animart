@@ -522,7 +522,7 @@ export class GameScene extends Phaser.Scene {
     this.timer.paused = true;
 
     // Fade to white and return to title
-    this.cameras.main.fadeOut(2000, 255, 255, 255, (_, progress) => {
+    this.cameras.main.fadeOut(3000, 255, 255, 255, (_, progress) => {
       if (progress === 1) {
         this.scene.stop("GameScene");
         this.scene.remove("GameScene");
